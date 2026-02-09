@@ -10,6 +10,13 @@ A lightweight marketplace MVP based on your requested flow:
 - Buyers open brand storefront and purchase script
 - Payment simulation triggers automatic delivery record
 
+## UX/UI Goals Covered
+
+- Responsive design for mobile, tablet, and desktop
+- Clean premium-style Tailwind UI
+- User-friendly forms and validation messages
+- Basic SEO meta tags (title + description + robots) on key pages
+
 ## Tech Stack
 
 - PHP 8+

@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
 
     if (!$brand || !$subdomain) {
         $error = 'Brand and subdomain are required.';
+    } elseif (!preg_match('/^[a-z0-9-]{3,30}$/', $subdomain)) {
+        $error = 'Subdomain must be 3-30 chars: lowercase letters, numbers, hyphen only.';
     } else {
         $check = $pdo->prepare('SELECT id FROM brands WHERE subdomain = ?');
         $check->execute([$subdomain]);
@@ -37,16 +39,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'uploa
     } else {
         $thumbName = null;
         if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
-            $thumbName = uniqid('thumb_', true) . '_' . basename($_FILES['thumbnail']['name']);
-            move_uploaded_file($_FILES['thumbnail']['tmp_name'], __DIR__ . '/../uploads/' . $thumbName);
+            $thumbExt = strtolower(pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION));
+            if (!in_array($thumbExt, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+                $error = 'Thumbnail must be jpg, jpeg, png, or webp.';
+            } else {
+                $thumbName = uniqid('thumb_', true) . '.' . $thumbExt;
+                move_uploaded_file($_FILES['thumbnail']['tmp_name'], __DIR__ . '/../uploads/' . $thumbName);
+            }
         }
 
-        $scriptName = uniqid('script_', true) . '_' . basename($_FILES['script_file']['name']);
-        move_uploaded_file($_FILES['script_file']['tmp_name'], __DIR__ . '/../uploads/' . $scriptName);
+        if (!$error) {
+            $scriptExt = strtolower(pathinfo($_FILES['script_file']['name'], PATHINFO_EXTENSION));
+            if (!in_array($scriptExt, ['zip', 'php'], true)) {
+                $error = 'Script file must be ZIP or PHP.';
+            } else {
+                $scriptName = uniqid('script_', true) . '.' . $scriptExt;
+                move_uploaded_file($_FILES['script_file']['tmp_name'], __DIR__ . '/../uploads/' . $scriptName);
 
-        $stmt = $pdo->prepare('INSERT INTO scripts (developer_id, brand_id, title, description, price, file_path, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$user['id'], $brandId, $title, $description, $price, $scriptName, $thumbName]);
-        $message = 'Script uploaded successfully.';
+                $stmt = $pdo->prepare('INSERT INTO scripts (developer_id, brand_id, title, description, price, file_path, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$user['id'], $brandId, $title, $description, $price, $scriptName, $thumbName]);
+                $message = 'Script uploaded successfully.';
+            }
+        }
     }
 }
 
@@ -59,24 +73,24 @@ $scripts->execute([$user['id']]);
 $scripts = $scripts->fetchAll();
 ?>
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>Developer Dashboard</title></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Developer Dashboard | DevScript Market</title><meta name="description" content="Manage your brand, subdomain and script packages."><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="bg-slate-100">
-<div class="max-w-6xl mx-auto p-6 space-y-8">
-  <div class="flex justify-between items-center"><h1 class="text-3xl font-bold">Developer Dashboard</h1><a href="/" class="text-blue-600">Home</a></div>
+<div class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+  <div class="flex flex-wrap gap-3 justify-between items-center"><h1 class="text-2xl sm:text-3xl font-bold">Developer Dashboard</h1><a href="/" class="text-blue-600">Home</a></div>
   <?php if ($message): ?><p class="bg-green-100 text-green-700 p-3 rounded"><?= htmlspecialchars($message) ?></p><?php endif; ?>
   <?php if ($error): ?><p class="bg-red-100 text-red-700 p-3 rounded"><?= htmlspecialchars($error) ?></p><?php endif; ?>
 
-  <section class="bg-white rounded-xl shadow p-6">
+  <section class="bg-white rounded-xl shadow p-4 sm:p-6">
     <h2 class="font-bold text-xl mb-4">1) Create Brand + Subdomain</h2>
     <form method="post" class="grid md:grid-cols-3 gap-3">
       <input type="hidden" name="action" value="create_brand">
       <input name="brand_name" placeholder="Brand Name" class="border rounded p-2" required>
       <input name="subdomain" placeholder="Subdomain (example: mybrand)" class="border rounded p-2" required>
-      <button class="bg-blue-600 text-white rounded px-4">Create Brand</button>
+      <button class="bg-blue-600 text-white rounded px-4 py-2">Create Brand</button>
     </form>
   </section>
 
-  <section class="bg-white rounded-xl shadow p-6">
+  <section class="bg-white rounded-xl shadow p-4 sm:p-6">
     <h2 class="font-bold text-xl mb-4">2) Upload Script Package</h2>
     <form method="post" enctype="multipart/form-data" class="grid md:grid-cols-2 gap-3">
       <input type="hidden" name="action" value="upload_script">
@@ -90,15 +104,15 @@ $scripts = $scripts->fetchAll();
       <textarea name="description" placeholder="Description" class="border rounded p-2 md:col-span-2" required></textarea>
       <input name="price" type="number" step="0.01" placeholder="Price" class="border rounded p-2" required>
       <label class="border rounded p-2">Script ZIP/PHP file: <input type="file" name="script_file" required></label>
-      <label class="border rounded p-2 md:col-span-2">Thumbnail image (optional): <input type="file" name="thumbnail" accept="image/*"></label>
+      <label class="border rounded p-2 md:col-span-2">Thumbnail image: <input type="file" name="thumbnail" accept="image/*"></label>
       <button class="bg-green-600 text-white rounded px-4 py-2 md:col-span-2">Upload Package</button>
     </form>
   </section>
 
-  <section class="bg-white rounded-xl shadow p-6">
+  <section class="bg-white rounded-xl shadow p-4 sm:p-6">
     <h2 class="font-bold text-xl mb-4">My Uploaded Packages</h2>
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <table class="w-full text-sm min-w-[640px]">
         <thead><tr class="text-left border-b"><th>Title</th><th>Brand</th><th>Subdomain</th><th>Price</th></tr></thead>
         <tbody>
           <?php foreach ($scripts as $s): ?>

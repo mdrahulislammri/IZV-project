@@ -28,17 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>Checkout</title></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Checkout | DevScript Market</title><meta name="description" content="Complete checkout and get instant delivery."><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
-<div class="bg-white rounded-xl shadow p-8 w-full max-w-lg">
+<div class="bg-white rounded-xl shadow p-6 sm:p-8 w-full max-w-lg border">
   <h1 class="text-2xl font-bold mb-4">Complete Payment</h1>
   <p class="mb-2">Product: <strong><?= htmlspecialchars($script['title']) ?></strong></p>
   <p class="mb-2">Brand: <strong><?= htmlspecialchars($script['brand_name']) ?></strong></p>
   <p class="mb-6">Amount: <strong>৳<?= number_format((float)$script['price'], 2) ?></strong></p>
-  <p class="text-sm text-slate-500 mb-4">Demo payment flow: click button to simulate successful payment and auto website delivery.</p>
+  <p class="text-sm text-slate-500 mb-4">Demo checkout: click below to simulate successful payment and auto-delivery.</p>
   <form method="post">
     <input type="hidden" name="script_id" value="<?= (int)$scriptId ?>">
-    <button class="w-full bg-green-600 text-white rounded py-2">Pay Now</button>
+    <button class="w-full bg-green-600 text-white rounded py-3 hover:bg-green-700">Pay Now</button>
   </form>
 </div>
 </body></html>

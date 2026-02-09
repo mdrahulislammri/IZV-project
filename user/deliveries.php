@@ -8,13 +8,13 @@ $stmt->execute([$user['id']]);
 $deliveries = $stmt->fetchAll();
 ?>
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>My Deliveries</title></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Deliveries | DevScript Market</title><meta name="description" content="View your delivered website packages."><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="bg-slate-100 min-h-screen">
-<div class="max-w-5xl mx-auto p-6">
-  <div class="flex justify-between items-center mb-6"><h1 class="text-3xl font-bold">My Website Deliveries</h1><a href="/" class="text-blue-600">Home</a></div>
+<div class="max-w-6xl mx-auto p-4 sm:p-6">
+  <div class="flex justify-between items-center mb-6"><h1 class="text-2xl sm:text-3xl font-bold">My Website Deliveries</h1><a href="/" class="text-blue-600">Home</a></div>
   <?php if (isset($_GET['success'])): ?><p class="bg-green-100 text-green-700 p-3 rounded mb-4">Payment successful! Website package delivered.</p><?php endif; ?>
-  <div class="bg-white rounded-xl shadow overflow-hidden">
-    <table class="w-full text-sm">
+  <div class="bg-white rounded-xl shadow overflow-x-auto">
+    <table class="w-full text-sm min-w-[760px]">
       <thead class="bg-slate-50"><tr class="text-left"><th class="p-3">Script</th><th>Payment TXN</th><th>Delivery Note</th><th>Package</th><th>Date</th></tr></thead>
       <tbody>
         <?php foreach ($deliveries as $d): ?>
