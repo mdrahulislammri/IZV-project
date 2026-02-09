@@ -1,0 +1,58 @@
+CREATE DATABASE IF NOT EXISTS izv_project CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE izv_project;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('buyer', 'developer') NOT NULL DEFAULT 'buyer',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS brands (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  developer_id INT NOT NULL,
+  brand_name VARCHAR(120) NOT NULL,
+  subdomain VARCHAR(120) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS scripts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  developer_id INT NOT NULL,
+  brand_id INT NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  description TEXT NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  file_path VARCHAR(255) NOT NULL,
+  thumbnail VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  script_id INT NOT NULL,
+  payment_status ENUM('pending', 'paid') NOT NULL DEFAULT 'pending',
+  payment_txn VARCHAR(60) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (script_id) REFERENCES scripts(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS deliveries (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL,
+  user_id INT NOT NULL,
+  script_id INT NOT NULL,
+  delivery_note TEXT,
+  delivered_url VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (script_id) REFERENCES scripts(id) ON DELETE CASCADE
+);
