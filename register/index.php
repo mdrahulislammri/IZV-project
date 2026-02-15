@@ -30,15 +30,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Register</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4"><form method="post" class="bg-white p-8 rounded-xl border shadow w-full max-w-md space-y-3">
-<h1 class="text-2xl font-bold">Register</h1>
-<?php if ($error): ?><p class="text-red-600 text-sm"><?= htmlspecialchars($error) ?></p><?php endif; ?>
-<input name="username" placeholder="Username" class="w-full border rounded p-2" required>
-<input name="email" type="email" placeholder="Email" class="w-full border rounded p-2" required>
-<input name="password" type="password" placeholder="Password" class="w-full border rounded p-2" required>
-<input name="support_number" placeholder="Support Number" class="w-full border rounded p-2" required>
-<select name="role" class="w-full border rounded p-2"><option value="buyer">Buyer</option><option value="developer">Developer</option></select>
-<button class="w-full bg-blue-600 text-white rounded p-2">Create Account</button>
-<p class="text-sm">Have account? <a class="text-blue-600" href="/login">Login</a></p>
-</form></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Register | ScriptDeploy</title>
+  <meta name="description" content="Create a buyer or developer account on ScriptDeploy.">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-100 via-white to-purple-100 p-4">
+  <div class="mx-auto flex min-h-screen max-w-5xl items-center justify-center">
+    <div class="grid w-full overflow-hidden rounded-2xl border bg-white shadow-xl md:grid-cols-2">
+      <section class="hidden bg-slate-900 p-8 text-white md:block">
+        <h1 class="text-3xl font-black">Create Account</h1>
+        <p class="mt-3 text-slate-300">Join as a buyer or developer and access role-based tools.</p>
+      </section>
+      <section class="p-8">
+        <h2 class="mb-1 text-2xl font-bold">Register</h2>
+        <p class="mb-5 text-sm text-slate-500">All fields are required.</p>
+        <?php if ($error): ?><p class="mb-3 rounded bg-red-100 p-2 text-sm text-red-700"><?= htmlspecialchars($error) ?></p><?php endif; ?>
+        <form method="post" class="space-y-3">
+          <input name="username" placeholder="Username" class="w-full rounded-lg border p-3" required>
+          <input name="email" type="email" placeholder="Email" class="w-full rounded-lg border p-3" required>
+          <input name="password" type="password" placeholder="Password" class="w-full rounded-lg border p-3" required>
+          <input name="support_number" placeholder="Support Number" class="w-full rounded-lg border p-3" required>
+          <select name="role" class="w-full rounded-lg border p-3">
+            <option value="buyer">Buyer</option>
+            <option value="developer">Developer</option>
+          </select>
+          <button class="w-full rounded-lg bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700">Create Account</button>
+        </form>
+        <p class="mt-4 text-sm text-slate-600">Already have account? <a class="font-medium text-blue-600" href="/login">Login</a></p>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

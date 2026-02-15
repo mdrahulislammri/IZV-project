@@ -12,15 +12,46 @@ $activeProjects = (int)$active->fetch()['c'];
 
 $deactiveProjects = max(0, $totalProjects - $activeProjects);
 ?>
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>User Dashboard</title><script src="https://cdn.tailwindcss.com"></script></head>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>User Dashboard | ScriptDeploy</title>
+  <meta name="description" content="Buyer dashboard with project metrics and quick access menu.">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 <body class="bg-slate-100">
-<div class="max-w-7xl mx-auto p-4 sm:p-6">
-<div class="flex justify-between items-center mb-6"><h1 class="text-3xl font-bold">Welcome: <?= htmlspecialchars($user['username']) ?></h1>
-<details class="relative"><summary class="cursor-pointer bg-white border rounded px-3 py-2">⋮ Menu</summary><div class="absolute right-0 mt-2 bg-white border rounded shadow p-2 w-44 space-y-1 z-10"><a class="block" href="/user/dashboard">Dashboard</a><a class="block" href="/shop">Shop</a><a class="block" href="/user/my-projects">My Projects</a><a class="block" href="/user/invoice">Invoice</a><a class="block" href="/ticket">Ticket</a><a class="block text-red-600" href="/logout">Logout</a></div></details>
-</div>
-<div class="grid sm:grid-cols-3 gap-4">
-<div class="bg-white border rounded-xl p-5"><p class="text-slate-500">Total Projects</p><p class="text-3xl font-bold"><?= $totalProjects ?></p></div>
-<div class="bg-white border rounded-xl p-5"><p class="text-slate-500">Active Projects</p><p class="text-3xl font-bold text-green-600"><?= $activeProjects ?></p></div>
-<div class="bg-white border rounded-xl p-5"><p class="text-slate-500">Deactive Projects</p><p class="text-3xl font-bold text-red-600"><?= $deactiveProjects ?></p></div>
-</div>
-</div></body></html>
+  <div class="mx-auto max-w-7xl p-4 sm:p-6">
+    <div class="mb-6 flex items-center justify-between gap-3">
+      <h1 class="text-2xl font-black sm:text-3xl">Welcome, <?= htmlspecialchars($user['username']) ?></h1>
+      <details class="relative">
+        <summary class="cursor-pointer rounded-lg border bg-white px-4 py-2 font-medium">⋮ Menu</summary>
+        <div class="absolute right-0 z-10 mt-2 w-48 space-y-1 rounded-xl border bg-white p-2 shadow">
+          <a class="block rounded px-2 py-1 hover:bg-slate-100" href="/user/dashboard">Dashboard</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-100" href="/shop">Shop</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-100" href="/user/my-projects">My Projects</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-100" href="/user/invoice">Invoice</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-100" href="/ticket">Ticket</a>
+          <a class="block rounded px-2 py-1 text-red-600 hover:bg-red-50" href="/logout">Logout</a>
+        </div>
+      </details>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-3">
+      <article class="rounded-xl border bg-white p-5 shadow-sm">
+        <p class="text-sm text-slate-500">Total Projects</p>
+        <p class="text-3xl font-black"><?= $totalProjects ?></p>
+      </article>
+      <article class="rounded-xl border bg-white p-5 shadow-sm">
+        <p class="text-sm text-slate-500">Active Projects</p>
+        <p class="text-3xl font-black text-green-600"><?= $activeProjects ?></p>
+      </article>
+      <article class="rounded-xl border bg-white p-5 shadow-sm">
+        <p class="text-sm text-slate-500">Deactive Projects</p>
+        <p class="text-3xl font-black text-red-600"><?= $deactiveProjects ?></p>
+      </article>
+    </div>
+  </div>
+</body>
+</html>

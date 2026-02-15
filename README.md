@@ -2,12 +2,19 @@
 
 Updated system includes:
 
-- Single landing page (`/`) with features/about/contact
+- Single landing page (`/`) with premium design sections (features/about/contact)
 - Authentication with role-based redirects
 - Login with **Email or Username + Password**
 - Register fields: Username, Email, Password, Support Number, Role
 - Buyer panel: dashboard, shop filters, buy flow, my projects, invoices, tickets
 - Developer panel: dashboard, my projects upload, clients, warns, account, tickets
+
+## UX / SEO Improvements
+
+- Responsive layout for mobile/tablet/desktop
+- Better visual hierarchy and professional card-based UI
+- SEO-friendly metadata on major pages (`title`, `description`, OG tags)
+- User-friendly flows and clear menu navigation for both roles
 
 ## Auth Redirect Rules
 
