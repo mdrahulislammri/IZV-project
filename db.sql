@@ -1,5 +1,4 @@
-CREATE DATABASE IF NOT EXISTS izv_project CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE izv_project;
+
 
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -105,4 +104,3 @@ INSERT IGNORE INTO categories (id, name) VALUES
 (1,'Ecommerce'),
 (2,'Portfolio'),
 (3,'SaaS'),
-(4,'Agency');
