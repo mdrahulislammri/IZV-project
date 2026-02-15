@@ -25,7 +25,7 @@ $user = currentUser($pdo);
         <a href="#about" class="text-slate-600 hover:text-slate-900">About</a>
         <a href="#contact" class="text-slate-600 hover:text-slate-900">Contact</a>
         <?php if ($user): ?>
-          <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700" href="<?= $user['role'] === 'developer' ? '/dev/dashboard' : '/user/dashboard' ?>">Dashboard</a>
+          <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700" href="<?= dashboardPathByRole($user['role']) ?>">Dashboard</a>
           <a class="text-red-600 hover:text-red-700" href="/logout">Logout</a>
         <?php else: ?>
           <a class="text-blue-600 hover:text-blue-700" href="/login">Login</a>
@@ -54,6 +54,7 @@ $user = currentUser($pdo);
           <li>✅ Smart shop filters (category/developer/price)</li>
           <li>✅ Subscription + invoice renew + late fee logic</li>
           <li>✅ Support ticket flow for both roles</li>
+          <li>✅ Admin panel for users, warns, categories, and ticket replies</li>
         </ul>
       </div>
     </section>

@@ -8,6 +8,7 @@ Updated system includes:
 - Register fields: Username, Email, Password, Support Number, Role
 - Buyer panel: dashboard, shop filters, buy flow, my projects, invoices, tickets
 - Developer panel: dashboard, my projects upload, clients, warns, account, tickets
+- Admin panel: dashboard, users, categories, warns, ticket replies
 
 ## UX / SEO Improvements
 
@@ -27,6 +28,7 @@ Updated system includes:
 - `/register`
 - `/user/dashboard`
 - `/dev/dashboard`
+- `/admin/dashboard`
 - `/shop`
 - `/user/my-projects`
 - `/user/invoice`
@@ -40,6 +42,16 @@ php -S 0.0.0.0:8000
 ```
 
 Then open `http://localhost:8000`.
+
+
+## Create First Admin
+
+After importing DB, create an admin user from MySQL (replace hash with your own bcrypt hash):
+
+```sql
+INSERT INTO users (username,email,password,support_number,role,status)
+VALUES ('admin','admin@example.com','$2y$10$replace_with_bcrypt_hash','8801xxxxxxx','admin','active');
+```
 
 ## Security + Business Logic Added
 

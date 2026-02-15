@@ -6,6 +6,15 @@ function isLoggedIn(): bool
     return isset($_SESSION['user_id']);
 }
 
+function dashboardPathByRole(string $role): string
+{
+    return match ($role) {
+        'developer' => '/dev/dashboard',
+        'admin' => '/admin/dashboard',
+        default => '/user/dashboard',
+    };
+}
+
 function currentUser(PDO $pdo): ?array
 {
     if (!isLoggedIn()) {
@@ -38,7 +47,7 @@ function requireRole(PDO $pdo, string $role): array
 {
     $user = requireLogin($pdo);
     if ($user['role'] !== $role) {
-        header('Location: ' . ($user['role'] === 'developer' ? '/dev/dashboard' : '/user/dashboard'));
+        header('Location: ' . dashboardPathByRole($user['role']));
         exit;
     }
     return $user;
@@ -46,6 +55,6 @@ function requireRole(PDO $pdo, string $role): array
 
 function redirectByRole(array $user): void
 {
-    header('Location: ' . ($user['role'] === 'developer' ? '/dev/dashboard' : '/user/dashboard'));
+    header('Location: ' . dashboardPathByRole($user['role']));
     exit;
 }
