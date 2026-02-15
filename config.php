@@ -1,8 +1,8 @@
 <?php
 $host = '127.0.0.1';
-$db   = 'izv_project';
-$user = 'root';
-$pass = '';
+$db   = 'techxtop_izv-project';
+$user = 'techxtop_izv-project';
+$pass = 'techxtop_izv-project';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
