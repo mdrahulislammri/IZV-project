@@ -1,0 +1,37 @@
+Options -Indexes
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Keep real files/directories unchanged
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Route-style URLs to folder index.php
+  RewriteRule ^login/?$ login/index.php [L,QSA]
+  RewriteRule ^register/?$ register/index.php [L,QSA]
+  RewriteRule ^logout/?$ logout/index.php [L,QSA]
+  RewriteRule ^ticket/?$ ticket/index.php [L,QSA]
+
+  RewriteRule ^shop/?$ shop/index.php [L,QSA]
+  RewriteRule ^shop/buy/?$ shop/buy.php [L,QSA]
+  RewriteRule ^shop/success/?$ shop/success.php [L,QSA]
+
+  RewriteRule ^user/dashboard/?$ user/dashboard.php [L,QSA]
+  RewriteRule ^user/my-projects/?$ user/my-projects.php [L,QSA]
+  RewriteRule ^user/invoice/?$ user/invoice.php [L,QSA]
+
+  RewriteRule ^dev/dashboard/?$ dev/dashboard.php [L,QSA]
+  RewriteRule ^dev/my-projects/?$ dev/my-projects.php [L,QSA]
+  RewriteRule ^dev/my-clients/?$ dev/my-clients.php [L,QSA]
+  RewriteRule ^dev/my-warns/?$ dev/my-warns.php [L,QSA]
+  RewriteRule ^dev/my-account/?$ dev/my-account.php [L,QSA]
+
+  RewriteRule ^admin/dashboard/?$ admin/dashboard.php [L,QSA]
+  RewriteRule ^admin/users/?$ admin/users.php [L,QSA]
+  RewriteRule ^admin/categories/?$ admin/categories.php [L,QSA]
+  RewriteRule ^admin/warns/?$ admin/warns.php [L,QSA]
+  RewriteRule ^admin/tickets/?$ admin/tickets.php [L,QSA]
+</IfModule>
