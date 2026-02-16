@@ -20,7 +20,7 @@ if (!empty($_GET['max_price'])) {
     $params[] = (float)$_GET['max_price'];
 }
 
-$sql = 'SELECT p.*, c.name category_name, u.username developer_name FROM projects p JOIN categories c ON c.id=p.category_id JOIN users u ON u.id=p.developer_id WHERE p.status="active"';
+$sql = 'SELECT p.*, c.name category_name, u.username developer_name, b.subdomain, b.brand_name FROM projects p JOIN categories c ON c.id=p.category_id JOIN users u ON u.id=p.developer_id JOIN brands b ON b.id=p.brand_id WHERE p.status="active"';
 if ($where) {
     $sql .= ' AND ' . implode(' AND ', $where);
 }
@@ -71,9 +71,10 @@ $projects = $stmt->fetchAll();
             <h2 class="text-lg font-bold"><?= htmlspecialchars($p['name']) ?></h2>
             <p class="text-sm text-slate-400">Developer: <?= htmlspecialchars($p['developer_name']) ?></p>
             <p class="text-sm text-slate-400">Category: <?= htmlspecialchars($p['category_name']) ?></p>
+            <p class="text-sm text-slate-400">Brand: <?= htmlspecialchars($p['brand_name']) ?> (<?= htmlspecialchars($p['subdomain']) ?>)</p>
             <p class="mt-2 text-sm text-slate-300 line-clamp-3"><?= htmlspecialchars($p['description']) ?></p>
             <div class="mt-4 flex items-center justify-between">
-              <a class="text-sm font-medium text-blue-300 hover:text-blue-200" target="_blank" href="<?= htmlspecialchars($p['preview_link']) ?>">Preview</a>
+              <div class="flex gap-3"><a class="text-sm font-medium text-blue-300 hover:text-blue-200" target="_blank" href="<?= htmlspecialchars($p['preview_link']) ?>">Preview</a><a class="text-sm font-medium text-cyan-300 hover:text-cyan-200" target="_blank" href="/store/<?= urlencode($p['subdomain']) ?>">Store</a></div>
               <span class="text-lg font-bold text-emerald-300">৳<?= number_format((float)$p['base_price'], 2) ?></span>
             </div>
             <a href="/shop/buy.php?project_id=<?= $p['id'] ?>" class="mt-4 block rounded-lg bg-emerald-600 px-3 py-2 text-center font-medium text-white hover:bg-emerald-500">Buy Now</a>

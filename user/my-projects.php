@@ -11,6 +11,8 @@ $rows = $stmt->fetchAll();
 <?php foreach($rows as $r): ?>
 <div class="bg-white border rounded-xl p-4">
 <h2 class="font-bold"><?= htmlspecialchars($r['project_name']) ?></h2>
+<p class="text-xs text-slate-500">Build Status: <?= htmlspecialchars($r['build_status'] ?? 'delivered') ?> | Source: <?= htmlspecialchars($r['source_subdomain'] ?? '-') ?></p>
+<p class="text-xs text-slate-500">Delivery Note: <?= htmlspecialchars($r['delivery_note'] ?? 'Auto-delivered') ?></p>
 <iframe src="https://<?= htmlspecialchars($r['deployed_url']) ?>" class="w-full h-32 border rounded my-2" loading="lazy"></iframe>
 <details><summary class="cursor-pointer text-blue-600">Manage</summary>
 <div class="mt-2 text-sm space-y-1">

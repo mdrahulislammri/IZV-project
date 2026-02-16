@@ -7,7 +7,8 @@ Updated system includes:
 - Login with **Email or Username + Password**
 - Register fields: Username, Email, Password, Support Number, Role
 - Buyer panel: dashboard, shop filters, buy flow, my projects, invoices, tickets
-- Developer panel: dashboard, my projects upload, clients, warns, account, tickets
+- Developer panel: dashboard, brands, my projects upload, clients, warns, account, tickets
+- Brand storefront system: developer creates brand+subdomain, projects appear in brand store
 - Admin panel: dashboard, users, categories, warns, ticket replies
 
 ## UX / SEO Improvements
@@ -30,6 +31,8 @@ Updated system includes:
 - `/dev/dashboard`
 - `/admin/dashboard`
 - `/shop`
+- `/store/{subdomain}`
+- `/dev/brands`
 - `/user/my-projects`
 - `/user/invoice`
 - `/ticket`
@@ -77,3 +80,11 @@ VALUES ('admin','admin@example.com','$2y$10$replace_with_bcrypt_hash','8801xxxxx
 - Subscription duration-based pricing (month-based)
 
 > Note: Auto deployment is simulated in success flow UI with progress animation and generated site/admin credentials.
+
+
+## Auto build + delivery flow
+
+1. Developer creates brand and subdomain (`/dev/brands`).
+2. Developer uploads project under that brand (`/dev/my-projects`).
+3. Brand storefront shows projects at `/store/{subdomain}`.
+4. Buyer purchases from storefront and system auto-creates order with delivered build details.

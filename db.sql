@@ -1,9 +1,4 @@
 -- ScriptDeploy database schema (cPanel/phpMyAdmin friendly)
--- How to use:
--- 1) Create/select your database from cPanel/MySQL Databases.
--- 2) Open phpMyAdmin -> select that database.
--- 3) Import this file.
-
 SET NAMES utf8mb4;
 SET time_zone = '+00:00';
 SET FOREIGN_KEY_CHECKS = 0;
@@ -14,6 +9,7 @@ DROP TABLE IF EXISTS tickets;
 DROP TABLE IF EXISTS invoices;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS brands;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
 
@@ -34,9 +30,21 @@ CREATE TABLE categories (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE brands (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  developer_id INT UNSIGNED NOT NULL,
+  brand_name VARCHAR(140) NOT NULL,
+  subdomain VARCHAR(120) NOT NULL UNIQUE,
+  tagline VARCHAR(255) NULL,
+  status ENUM('active','deactive') NOT NULL DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_brands_developer FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE projects (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   developer_id INT UNSIGNED NOT NULL,
+  brand_id INT UNSIGNED NOT NULL,
   category_id INT UNSIGNED NOT NULL,
   name VARCHAR(150) NOT NULL,
   description TEXT NOT NULL,
@@ -47,6 +55,7 @@ CREATE TABLE projects (
   status ENUM('active','deactive') NOT NULL DEFAULT 'active',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_projects_developer FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_projects_brand FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE CASCADE,
   CONSTRAINT fk_projects_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -62,6 +71,9 @@ CREATE TABLE orders (
   late_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
   total_price DECIMAL(10,2) NOT NULL,
   status ENUM('active','expired') NOT NULL DEFAULT 'active',
+  build_status ENUM('queued','building','delivered') NOT NULL DEFAULT 'delivered',
+  delivery_note TEXT NULL,
+  source_subdomain VARCHAR(120) NULL,
   expires_at DATE NOT NULL,
   deployed_url VARCHAR(255) NOT NULL,
   admin_url VARCHAR(255) NOT NULL,
@@ -117,7 +129,6 @@ CREATE TABLE developer_clients (
   CONSTRAINT fk_dc_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Default categories
 INSERT INTO categories (id, name) VALUES (1,'Ecommerce') ON DUPLICATE KEY UPDATE name=VALUES(name);
 INSERT INTO categories (id, name) VALUES (2,'Portfolio') ON DUPLICATE KEY UPDATE name=VALUES(name);
 INSERT INTO categories (id, name) VALUES (3,'SaaS') ON DUPLICATE KEY UPDATE name=VALUES(name);

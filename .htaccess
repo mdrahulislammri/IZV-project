@@ -25,6 +25,7 @@ DirectoryIndex index.php index.html
 
   RewriteRule ^dev/dashboard/?$ dev/dashboard.php [L,QSA]
   RewriteRule ^dev/my-projects/?$ dev/my-projects.php [L,QSA]
+  RewriteRule ^dev/brands/?$ dev/brands.php [L,QSA]
   RewriteRule ^dev/my-clients/?$ dev/my-clients.php [L,QSA]
   RewriteRule ^dev/my-warns/?$ dev/my-warns.php [L,QSA]
   RewriteRule ^dev/my-account/?$ dev/my-account.php [L,QSA]
@@ -34,4 +35,6 @@ DirectoryIndex index.php index.html
   RewriteRule ^admin/categories/?$ admin/categories.php [L,QSA]
   RewriteRule ^admin/warns/?$ admin/warns.php [L,QSA]
   RewriteRule ^admin/tickets/?$ admin/tickets.php [L,QSA]
+
+  RewriteRule ^store/([a-zA-Z0-9-]+)/?$ store/index.php?subdomain=$1 [L,QSA]
 </IfModule>
