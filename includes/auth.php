@@ -15,6 +15,23 @@ function dashboardPathByRole(string $role): string
     };
 }
 
+function csrfToken(): string
+{
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function verifyCsrfOrFail(?string $token): void
+{
+    $sessionToken = $_SESSION['csrf_token'] ?? '';
+    if (!$token || !$sessionToken || !hash_equals($sessionToken, $token)) {
+        http_response_code(419);
+        exit('CSRF token mismatch.');
+    }
+}
+
 function currentUser(PDO $pdo): ?array
 {
     if (!isLoggedIn()) {
