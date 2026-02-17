@@ -4,6 +4,7 @@ SET time_zone = '+00:00';
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS developer_clients;
+DROP TABLE IF EXISTS admin_ip_whitelist;
 DROP TABLE IF EXISTS build_jobs;
 DROP TABLE IF EXISTS developer_wallet_transactions;
 DROP TABLE IF EXISTS developer_wallets;
@@ -158,6 +159,15 @@ CREATE TABLE invoices (
   CONSTRAINT fk_invoices_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+CREATE TABLE admin_ip_whitelist (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  ip_address VARCHAR(45) NOT NULL UNIQUE,
+  label VARCHAR(120) NULL,
+  status ENUM('active','inactive') NOT NULL DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE tickets (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NOT NULL,
@@ -208,5 +218,7 @@ ON DUPLICATE KEY UPDATE name=VALUES(name), price_monthly=VALUES(price_monthly), 
 INSERT INTO developer_packages (code, name, price_monthly, brand_limit, script_limit, install_limit, allow_custom_domain)
 VALUES ('enterprise','Enterprise',7999,-1,-1,-1,1)
 ON DUPLICATE KEY UPDATE name=VALUES(name), price_monthly=VALUES(price_monthly), brand_limit=VALUES(brand_limit), script_limit=VALUES(script_limit), install_limit=VALUES(install_limit), allow_custom_domain=VALUES(allow_custom_domain);
+
+INSERT INTO admin_ip_whitelist (ip_address, label, status) VALUES ('127.0.0.1', 'Localhost default admin access', 'active') ON DUPLICATE KEY UPDATE label=VALUES(label), status=VALUES(status);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -32,9 +32,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: /admin/users');
         exit;
     }
+
+    if (isset($_POST['create_user'])) {
+        $username = trim($_POST['new_username'] ?? '');
+        $email = trim($_POST['new_email'] ?? '');
+        $password = $_POST['new_password'] ?? '';
+        $support = trim($_POST['new_support_number'] ?? '');
+        $roleInput = $_POST['new_role'] ?? 'buyer';
+        $role = in_array($roleInput, ['buyer', 'developer', 'admin'], true) ? $roleInput : 'buyer';
+
+        if (!$username || !$email || !$password || !$support) {
+            pushToast('error', 'All create-user fields are required.');
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            pushToast('error', 'Invalid email format.');
+        } else {
+            $exists = $pdo->prepare('SELECT id FROM users WHERE email=? OR username=? LIMIT 1');
+            $exists->execute([$email, $username]);
+            if ($exists->fetch()) {
+                pushToast('error', 'Username or email already exists.');
+            } else {
+                $ins = $pdo->prepare('INSERT INTO users (username,email,password,support_number,role,status) VALUES (?,?,?,?,?,"active")');
+                $ins->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT), $support, $role]);
+                pushToast('success', strtoupper($role) . ' account created successfully.');
+            }
+        }
+        header('Location: /admin/users');
+        exit;
+    }
+
+    if (isset($_POST['add_ip'])) {
+        $ip = trim($_POST['ip_address'] ?? '');
+        $label = trim($_POST['ip_label'] ?? '');
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            pushToast('error', 'Invalid IP address.');
+        } else {
+            $stmt = $pdo->prepare('INSERT INTO admin_ip_whitelist (ip_address,label,status) VALUES (?,?,"active") ON DUPLICATE KEY UPDATE label=VALUES(label), status="active"');
+            $stmt->execute([$ip, $label ?: null]);
+            pushToast('success', 'Admin whitelist IP saved.');
+        }
+        header('Location: /admin/users');
+        exit;
+    }
+
+    if (isset($_POST['remove_ip_id'])) {
+        $id = (int)$_POST['remove_ip_id'];
+        $stmt = $pdo->prepare('DELETE FROM admin_ip_whitelist WHERE id=?');
+        $stmt->execute([$id]);
+        pushToast('success', 'Whitelist IP removed.');
+        header('Location: /admin/users');
+        exit;
+    }
 }
 
 $rows = $pdo->query("SELECT id, username, email, support_number, role, status, created_at FROM users ORDER BY id DESC")->fetchAll();
+$ips = $pdo->query('SELECT id, ip_address, label, status, created_at FROM admin_ip_whitelist ORDER BY id DESC')->fetchAll();
+$currentIp = getClientIp();
 ?>
 <!doctype html>
 <html lang="en">
@@ -45,10 +97,63 @@ $rows = $pdo->query("SELECT id, username, email, support_number, role, status, c
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100">
-  <div class="max-w-7xl mx-auto p-4 sm:p-6">
-    <div class="mb-4 flex justify-between">
+  <div class="max-w-7xl mx-auto p-4 sm:p-6 space-y-5">
+    <div class="mb-1 flex justify-between">
       <h1 class="text-3xl font-black">Manage Users</h1>
       <a class="text-blue-600" href="/admin/dashboard">Back</a>
+    </div>
+
+    <div class="grid gap-4 lg:grid-cols-2">
+      <section class="rounded-xl border bg-white p-4">
+        <h2 class="mb-2 text-xl font-bold">Add New User/Admin</h2>
+        <form method="post" class="grid gap-2 sm:grid-cols-2">
+          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+          <input type="hidden" name="create_user" value="1">
+          <input name="new_username" placeholder="Username" class="rounded border p-2" required>
+          <input name="new_email" type="email" placeholder="Email" class="rounded border p-2" required>
+          <input name="new_password" type="password" placeholder="Password" class="rounded border p-2" required>
+          <input name="new_support_number" placeholder="Support Number" class="rounded border p-2" required>
+          <select name="new_role" class="rounded border p-2">
+            <option value="buyer">Buyer</option>
+            <option value="developer">Developer</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button class="rounded bg-blue-600 p-2 text-white">Create Account</button>
+        </form>
+      </section>
+
+      <section class="rounded-xl border bg-white p-4">
+        <h2 class="mb-2 text-xl font-bold">Admin IP Whitelist</h2>
+        <p class="mb-2 text-sm text-slate-500">Current IP: <b><?= htmlspecialchars($currentIp) ?></b></p>
+        <form method="post" class="grid gap-2 sm:grid-cols-3">
+          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+          <input type="hidden" name="add_ip" value="1">
+          <input name="ip_address" placeholder="IP address" class="rounded border p-2" required>
+          <input name="ip_label" placeholder="Label (optional)" class="rounded border p-2">
+          <button class="rounded bg-emerald-600 p-2 text-white">Add / Activate</button>
+        </form>
+        <div class="mt-3 overflow-x-auto">
+          <table class="w-full min-w-[420px] text-sm">
+            <thead><tr class="bg-slate-50"><th class="p-2 text-left">IP</th><th>Label</th><th>Added</th><th></th></tr></thead>
+            <tbody>
+            <?php foreach ($ips as $ip): ?>
+              <tr class="border-t">
+                <td class="p-2 font-mono"><?= htmlspecialchars($ip['ip_address']) ?></td>
+                <td><?= htmlspecialchars((string)$ip['label']) ?></td>
+                <td><?= htmlspecialchars($ip['created_at']) ?></td>
+                <td>
+                  <form method="post">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+                    <input type="hidden" name="remove_ip_id" value="<?= (int)$ip['id'] ?>">
+                    <button class="text-red-600">Remove</button>
+                  </form>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
 
     <div class="bg-white border rounded-xl overflow-x-auto">
@@ -97,8 +202,8 @@ $rows = $pdo->query("SELECT id, username, email, support_number, role, status, c
                     <input name="email" type="email" value="<?= htmlspecialchars($r['email']) ?>" class="w-full rounded border p-1" required>
                     <input name="support_number" value="<?= htmlspecialchars($r['support_number']) ?>" class="w-full rounded border p-1" required>
                     <select name="status" class="w-full rounded border p-1">
-                      <option value="active" <?= $r['status']==='active'?'selected':'' ?>>Active</option>
-                      <option value="banned" <?= $r['status']==='banned'?'selected':'' ?>>Banned</option>
+                      <option value="active" <?= $r['status'] === 'active' ? 'selected' : '' ?>>Active</option>
+                      <option value="banned" <?= $r['status'] === 'banned' ? 'selected' : '' ?>>Banned</option>
                     </select>
                     <button class="w-full rounded bg-blue-600 py-1 text-white">Save</button>
                   </form>

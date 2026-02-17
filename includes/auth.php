@@ -32,6 +32,31 @@ function verifyCsrfOrFail(?string $token): void
     }
 }
 
+function getClientIp(): string
+{
+    $ip = trim((string)($_SERVER['REMOTE_ADDR'] ?? ''));
+    if (!$ip || !filter_var($ip, FILTER_VALIDATE_IP)) {
+        return '0.0.0.0';
+    }
+    return $ip;
+}
+
+function isAdminIpAllowed(PDO $pdo, ?string $ip = null): bool
+{
+    $candidate = $ip ?: getClientIp();
+    $stmt = $pdo->prepare('SELECT 1 FROM admin_ip_whitelist WHERE ip_address=? AND status="active" LIMIT 1');
+    $stmt->execute([$candidate]);
+    return (bool)$stmt->fetchColumn();
+}
+
+function enforceAdminIpOrFail(PDO $pdo): void
+{
+    if (!isAdminIpAllowed($pdo)) {
+        http_response_code(403);
+        exit('Access denied: your IP is not whitelisted for admin access.');
+    }
+}
+
 function currentUser(PDO $pdo): ?array
 {
     if (!isLoggedIn()) {
@@ -63,11 +88,21 @@ function requireLogin(PDO $pdo): array
 
 function requireRole(PDO $pdo, string $role): array
 {
+    if ($role === 'admin' && !isLoggedIn()) {
+        header('Location: /admin/login');
+        exit;
+    }
+
     $user = requireLogin($pdo);
     if ($user['role'] !== $role) {
         header('Location: ' . dashboardPathByRole($user['role']));
         exit;
     }
+
+    if ($role === 'admin') {
+        enforceAdminIpOrFail($pdo);
+    }
+
     return $user;
 }
 

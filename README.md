@@ -22,6 +22,9 @@ Updated system includes:
 
 - Buyer login success → `/user/dashboard`
 - Developer login success → `/dev/dashboard`
+- Admin login success → `/admin/dashboard` (via `/admin/login`)
+
+Admin login is separate and protected by IP whitelist (`admin_ip_whitelist` table).
 
 ## URL Structure
 
@@ -31,6 +34,7 @@ Updated system includes:
 - `/dev/register` (Developer)
 - `/user/dashboard`
 - `/dev/dashboard`
+- `/admin/login`
 - `/admin/dashboard`
 - `/shop`
 - `/store/{subdomain}`
@@ -105,3 +109,11 @@ Enforcements added:
 - Script upload limit by package
 - Purchase/install monthly limit by developer package
 - Custom domain purchase allowed only for Enterprise
+
+
+## Admin Security & User Provisioning
+
+- Admin login page is separate: `/admin/login`
+- Admin access is restricted to whitelisted IPs from `admin_ip_whitelist`
+- Admin can create buyer/developer/admin users from `/admin/users`
+- Admin can manage whitelist IP entries from `/admin/users`

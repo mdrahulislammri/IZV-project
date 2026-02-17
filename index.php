@@ -32,6 +32,7 @@ $user = currentUser($pdo);
           <a class="text-blue-300 hover:text-blue-200" href="/login">Buyer Login</a>
           <a class="rounded-lg border border-cyan-700 px-4 py-2 font-medium text-cyan-300 hover:bg-cyan-950" href="/dev/login">Developer Login</a>
           <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500" href="/register">Buyer Register</a>
+          <a class="rounded-lg border border-red-700 px-4 py-2 font-medium text-red-300 hover:bg-red-950" href="/admin/login">Admin Login</a>
         <?php endif; ?>
       </nav>
     </div>
