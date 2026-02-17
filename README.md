@@ -85,6 +85,7 @@ VALUES ('admin','admin@example.com','$2y$10$replace_with_bcrypt_hash','8801xxxxx
 - Warn model and ban-compatible status field
 - Invoice renew flow with 15-day late handling (6% fee)
 - Subscription duration-based pricing (month-based)
+- Buyer wallet + Developer wallet support (both roles)
 
 > Note: Auto deployment is simulated in success flow UI with progress animation and generated site/admin credentials.
 
@@ -106,6 +107,7 @@ Developers must activate a package from `/dev/package` before using full platfor
 - **Enterprise (৳7999/mo):** unlimited brands/scripts/installs, custom domain allowed
 
 Enforcements added:
+- Buyer payment uses buyer wallet balance during purchase flow.
 - Brand creation limit by package
 - Script upload limit by package
 - Purchase/install monthly limit by developer package

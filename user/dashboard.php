@@ -1,6 +1,21 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/user_wallet.php';
+
 $user = requireRole($pdo, 'buyer');
+$message = null;
+$error = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wallet_deposit_amount'])) {
+    verifyCsrfOrFail($_POST['csrf_token'] ?? null);
+    $amount = (float)($_POST['wallet_deposit_amount'] ?? 0);
+    if ($amount <= 0) {
+        $error = 'Deposit amount must be greater than 0.';
+    } else {
+        userWalletDeposit($pdo, (int)$user['id'], $amount, 'Buyer dashboard deposit');
+        $message = 'Wallet deposit added successfully.';
+    }
+}
 
 $total = $pdo->prepare('SELECT COUNT(*) c FROM orders WHERE user_id=?');
 $total->execute([$user['id']]);
@@ -11,6 +26,8 @@ $active->execute([$user['id']]);
 $activeProjects = (int)$active->fetch()['c'];
 
 $deactiveProjects = max(0, $totalProjects - $activeProjects);
+$wallet = userWalletRow($pdo, (int)$user['id']);
+$walletBalance = (float)$wallet['balance'];
 ?>
 <!doctype html>
 <html lang="en">
@@ -36,6 +53,19 @@ $deactiveProjects = max(0, $totalProjects - $activeProjects);
           <a class="block rounded px-2 py-1 text-red-300 hover:bg-red-950" href="/logout">Logout</a>
         </div>
       </details>
+    </div>
+
+    <?php if($message):?><p class="mb-3 rounded border border-emerald-700 bg-emerald-950/60 p-3 text-emerald-200"><?=htmlspecialchars($message)?></p><?php endif; ?>
+    <?php if($error):?><p class="mb-3 rounded border border-red-700 bg-red-950/60 p-3 text-red-200"><?=htmlspecialchars($error)?></p><?php endif; ?>
+
+    <div class="mb-4 rounded-xl border border-blue-700/40 bg-blue-950/30 p-4">
+      <p class="text-sm text-blue-300">Wallet Balance</p>
+      <p class="text-2xl font-bold">৳<?= number_format($walletBalance, 2) ?></p>
+      <form method="post" class="mt-3 flex flex-wrap gap-2 items-center">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+        <input type="number" step="0.01" min="1" name="wallet_deposit_amount" placeholder="Deposit amount" class="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm" required>
+        <button class="rounded bg-emerald-600 px-3 py-2 text-sm text-white hover:bg-emerald-500">Add Deposit</button>
+      </form>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-3">

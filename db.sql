@@ -8,7 +8,9 @@ DROP TABLE IF EXISTS site_settings;
 DROP TABLE IF EXISTS admin_ip_whitelist;
 DROP TABLE IF EXISTS build_jobs;
 DROP TABLE IF EXISTS developer_wallet_transactions;
+DROP TABLE IF EXISTS user_wallet_transactions;
 DROP TABLE IF EXISTS developer_wallets;
+DROP TABLE IF EXISTS user_wallets;
 DROP TABLE IF EXISTS developer_subscriptions;
 DROP TABLE IF EXISTS developer_packages;
 DROP TABLE IF EXISTS warns;
@@ -88,6 +90,24 @@ CREATE TABLE developer_wallet_transactions (
   note VARCHAR(255) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_wallet_tx_developer FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE user_wallets (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL UNIQUE,
+  balance DECIMAL(12,2) NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user_wallet FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE user_wallet_transactions (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  type ENUM('deposit','charge') NOT NULL,
+  amount DECIMAL(12,2) NOT NULL,
+  note VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user_wallet_tx FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE brands (
