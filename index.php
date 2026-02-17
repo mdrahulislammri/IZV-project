@@ -28,76 +28,81 @@ $navRegisterText = siteSetting($pdo, 'nav_register_text', 'Register');
   <meta name="twitter:card" content="summary_large_image">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased">
-  <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_#1d4ed8_0,_transparent_40%),radial-gradient(circle_at_top_left,_#0ea5e9_0,_transparent_35%)]"></div>
-  <header class="sticky top-0 z-30 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur">
-    <div class="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4">
-      <a href="/" class="text-2xl font-black tracking-tight"><?= htmlspecialchars($siteName) ?></a>
-      <nav class="flex flex-wrap items-center gap-3 text-sm sm:text-base">
-        <a href="#features" class="text-slate-300 hover:text-white">Features</a>
-        <a href="#about" class="text-slate-300 hover:text-white">About</a>
-        <a href="#contact" class="text-slate-300 hover:text-white">Contact</a>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased selection:bg-cyan-400/40">
+  <div class="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_10%_10%,_rgba(56,189,248,.22),_transparent_35%),radial-gradient(circle_at_90%_15%,_rgba(59,130,246,.20),_transparent_35%),radial-gradient(circle_at_50%_95%,_rgba(14,165,233,.18),_transparent_35%)]"></div>
+
+  <header class="sticky top-4 z-40 px-3 sm:px-6">
+    <div class="mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl">
+      <a href="/" class="text-xl font-black tracking-tight sm:text-2xl"><?= htmlspecialchars($siteName) ?></a>
+      <nav class="flex flex-wrap items-center gap-2 text-xs sm:gap-3 sm:text-sm">
+        <a href="#features" class="rounded-lg px-2 py-1 text-slate-300 hover:bg-white/10 hover:text-white">Features</a>
+        <a href="#about" class="rounded-lg px-2 py-1 text-slate-300 hover:bg-white/10 hover:text-white">About</a>
+        <a href="#contact" class="rounded-lg px-2 py-1 text-slate-300 hover:bg-white/10 hover:text-white">Contact</a>
         <?php if ($user): ?>
-          <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500" href="<?= dashboardPathByRole($user['role']) ?>">Dashboard</a>
-          <a class="rounded-lg border border-red-700 px-4 py-2 text-red-300 hover:bg-red-950" href="/logout">Logout</a>
+          <a class="rounded-lg bg-blue-600 px-3 py-2 font-medium text-white hover:bg-blue-500" href="<?= dashboardPathByRole($user['role']) ?>">Dashboard</a>
+          <a class="rounded-lg border border-red-600/50 px-3 py-2 text-red-300 hover:bg-red-950/60" href="/logout">Logout</a>
         <?php else: ?>
-          <a class="text-blue-300 hover:text-blue-200" href="/login"><?= htmlspecialchars($navLoginText) ?></a>
-          <a class="rounded-lg border border-cyan-700 px-4 py-2 font-medium text-cyan-300 hover:bg-cyan-950" href="/dev/login"><?= htmlspecialchars($navLoginText) ?></a>
-          <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500" href="/register"><?= htmlspecialchars($navRegisterText) ?></a>
-          <a class="rounded-lg border border-red-700 px-4 py-2 font-medium text-red-300 hover:bg-red-950" href="/admin/login"><?= htmlspecialchars($navLoginText) ?></a>
+          <a class="rounded-lg border border-white/15 px-3 py-2 text-slate-200 hover:bg-white/10" href="/login"><?= htmlspecialchars($navLoginText) ?></a>
+          <a class="rounded-lg border border-white/15 px-3 py-2 text-slate-200 hover:bg-white/10" href="/dev/login"><?= htmlspecialchars($navLoginText) ?></a>
+          <a class="rounded-lg bg-cyan-500 px-3 py-2 font-semibold text-slate-950 hover:bg-cyan-400" href="/register"><?= htmlspecialchars($navRegisterText) ?></a>
         <?php endif; ?>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="mx-auto grid w-full max-w-7xl gap-10 px-4 py-14 sm:py-20 lg:grid-cols-2 lg:items-center">
+  <main class="mx-auto w-full max-w-7xl px-4 pb-16 pt-6 sm:px-6 sm:pt-10">
+    <section class="grid items-center gap-8 lg:grid-cols-2">
       <div>
-        <p class="mb-3 inline-flex rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-300"><?= htmlspecialchars($heroBadge) ?></p>
-        <h1 class="mb-4 text-4xl font-black leading-tight sm:text-5xl"><?= htmlspecialchars($heroTitle) ?></h1>
-        <p class="mb-6 text-base text-slate-300 sm:text-lg"><?= htmlspecialchars($heroDescription) ?></p>
-        <div class="flex flex-wrap gap-3">
+        <p class="mb-4 inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1 text-xs font-semibold text-cyan-200"><?= htmlspecialchars($heroBadge) ?></p>
+        <h1 class="mb-4 text-4xl font-black leading-tight sm:text-5xl lg:text-6xl"><?= htmlspecialchars($heroTitle) ?></h1>
+        <p class="max-w-2xl text-base text-slate-300 sm:text-lg"><?= htmlspecialchars($heroDescription) ?></p>
+
+        <div class="mt-7 flex flex-wrap gap-3">
           <a href="/register" class="rounded-xl bg-white px-5 py-3 font-semibold text-slate-900 hover:bg-slate-200"><?= htmlspecialchars($navRegisterText) ?></a>
-          <a href="/dev/register" class="rounded-xl border border-cyan-700 bg-slate-900 px-5 py-3 font-semibold text-cyan-200 hover:bg-slate-800"><?= htmlspecialchars($navRegisterText) ?></a>
-          <a href="/shop" class="rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 font-semibold text-slate-100 hover:bg-slate-800">Explore Shop</a>
+          <a href="/shop" class="rounded-xl border border-slate-600 bg-slate-900/70 px-5 py-3 font-semibold text-slate-100 hover:bg-slate-800">Explore Shop</a>
         </div>
       </div>
-      <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-2xl shadow-blue-900/20">
+
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-blue-950/30 backdrop-blur-xl">
         <h2 class="mb-4 text-xl font-bold">Why <?= htmlspecialchars($siteName) ?>?</h2>
-        <ul class="space-y-3 text-slate-200">
-          <li>✅ Buyer dashboard with project status metrics</li>
-          <li>✅ Developer panel with sales, clients, and warns</li>
-          <li>✅ Smart shop filters (category/developer/price)</li>
-          <li>✅ Subscription + invoice renew + late fee logic</li>
-          <li>✅ Support ticket flow for both roles</li>
-          <li>✅ Admin panel for users, warns, categories, ticket replies</li>
-        </ul>
+        <div class="grid gap-3">
+          <article class="rounded-2xl border border-white/10 bg-slate-900/60 p-4">
+            <h3 class="font-semibold">Unified Marketplace</h3>
+            <p class="text-sm text-slate-300">Developers sell deploy-ready scripts while buyers launch websites in minutes.</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-slate-900/60 p-4">
+            <h3 class="font-semibold">Automated Flow</h3>
+            <p class="text-sm text-slate-300">Built-in billing, project installs, wallet charging and delivery updates.</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-slate-900/60 p-4">
+            <h3 class="font-semibold">Admin Controls</h3>
+            <p class="text-sm text-slate-300">Manage users, categories, warns, tickets and website content dynamically.</p>
+          </article>
+        </div>
       </div>
     </section>
 
-    <section id="features" class="mx-auto w-full max-w-7xl px-4 pb-10">
-      <div class="grid gap-4 md:grid-cols-3">
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="mb-2 text-lg font-bold">Secure Authentication</h3>
-          <p class="text-sm text-slate-300">Login with email/username, session middleware and role based redirects.</p>
-        </article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="mb-2 text-lg font-bold">Ecommerce Purchase Flow</h3>
-          <p class="text-sm text-slate-300">Shop filters, smooth checkout and duration-based billing for each order.</p>
-        </article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="mb-2 text-lg font-bold">Operational Controls</h3>
-          <p class="text-sm text-slate-300">Tickets, warns, admin controls and dashboard insights in one system.</p>
-        </article>
-      </div>
+    <section id="features" class="mt-14 grid gap-4 md:grid-cols-3">
+      <article class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+        <h3 class="mb-2 text-lg font-bold">Secure Authentication</h3>
+        <p class="text-sm text-slate-300">Role-based login flow with protected dashboards and middleware checks.</p>
+      </article>
+      <article class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+        <h3 class="mb-2 text-lg font-bold">Ecommerce Purchase Flow</h3>
+        <p class="text-sm text-slate-300">Smart shop filters, clean checkout and duration-based billing logic.</p>
+      </article>
+      <article class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+        <h3 class="mb-2 text-lg font-bold">Operational Controls</h3>
+        <p class="text-sm text-slate-300">Tickets, warns, user controls and business KPIs in one place.</p>
+      </article>
     </section>
 
-    <section id="about" class="mx-auto grid w-full max-w-7xl gap-4 px-4 pb-16 md:grid-cols-2">
-      <div class="rounded-xl border border-slate-800 bg-slate-900 p-6">
+    <section id="about" class="mt-14 grid gap-4 md:grid-cols-2">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
         <h3 class="mb-2 text-xl font-bold">About <?= htmlspecialchars($siteName) ?></h3>
         <p class="text-slate-300"><?= htmlspecialchars($siteName) ?> helps developers monetize deploy-ready projects and allows buyers to launch websites quickly through a premium workflow.</p>
       </div>
-      <div id="contact" class="rounded-xl border border-slate-800 bg-slate-900 p-6">
+      <div id="contact" class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
         <h3 class="mb-2 text-xl font-bold">Contact</h3>
         <p class="text-slate-300">Support Email: <?= htmlspecialchars($contactEmail) ?></p>
         <p class="text-slate-300">Business Hours: <?= htmlspecialchars($contactHours) ?></p>
