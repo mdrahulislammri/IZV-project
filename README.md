@@ -40,8 +40,12 @@ Admin login is separate and protected by IP whitelist (`admin_ip_whitelist` tabl
 - `/shop`
 - `/store/{subdomain}`
 - `/dev/brands`
+- `/dev/wallet`
+- `/dev/wallet/transection`
 - `/user/my-projects`
 - `/user/invoice`
+- `/user/wallet`
+- `/user/wallet/transection`
 - `/ticket`
 
 ## Setup

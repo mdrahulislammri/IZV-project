@@ -25,6 +25,9 @@ DirectoryIndex index.php index.html
   RewriteRule ^user/dashboard/?$ user/dashboard.php [L,QSA]
   RewriteRule ^user/my-projects/?$ user/my-projects.php [L,QSA]
   RewriteRule ^user/invoice/?$ user/invoice.php [L,QSA]
+  RewriteRule ^user/wallet/?$ user/wallet.php [L,QSA]
+  RewriteRule ^user/wallet/transection/?$ user/wallet-transactions.php [L,QSA]
+  RewriteRule ^user/wallet/transaction/?$ user/wallet-transactions.php [L,QSA]
 
   RewriteRule ^dev/dashboard/?$ dev/dashboard.php [L,QSA]
   RewriteRule ^dev/my-projects/?$ dev/my-projects.php [L,QSA]
@@ -33,6 +36,9 @@ DirectoryIndex index.php index.html
   RewriteRule ^dev/my-clients/?$ dev/my-clients.php [L,QSA]
   RewriteRule ^dev/my-warns/?$ dev/my-warns.php [L,QSA]
   RewriteRule ^dev/my-account/?$ dev/my-account.php [L,QSA]
+  RewriteRule ^dev/wallet/?$ dev/wallet.php [L,QSA]
+  RewriteRule ^dev/wallet/transection/?$ dev/wallet-transactions.php [L,QSA]
+  RewriteRule ^dev/wallet/transaction/?$ dev/wallet-transactions.php [L,QSA]
 
   RewriteRule ^admin/dashboard/?$ admin/dashboard.php [L,QSA]
   RewriteRule ^admin/users/?$ admin/users.php [L,QSA]
