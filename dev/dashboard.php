@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/developer_package.php';
 $user = requireRole($pdo, 'developer');
 
 $stmt = $pdo->prepare('SELECT COUNT(*) c FROM projects WHERE developer_id=?');
@@ -17,6 +18,9 @@ $totalWarn = (int)$warn->fetch()['c'];
 $brandStmt = $pdo->prepare('SELECT COUNT(*) c FROM brands WHERE developer_id=?');
 $brandStmt->execute([$user['id']]);
 $totalBrands = (int)$brandStmt->fetch()['c'];
+
+$activeSub = getActiveSubscription($pdo, (int)$user['id']);
+$activePlanCode = $activeSub['package_code'] ?? 'none';
 ?>
 <!doctype html>
 <html lang="en">
@@ -36,6 +40,7 @@ $totalBrands = (int)$brandStmt->fetch()['c'];
         <div class="absolute right-0 z-10 mt-2 w-52 space-y-1 rounded-xl border border-slate-700 bg-slate-900 p-2 shadow-xl">
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/dashboard">Dashboard</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/my-projects">My Projects</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/package">My Package</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/brands">My Brands</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/my-clients">My Clients</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/my-warns">My Warns</a>
@@ -46,6 +51,7 @@ $totalBrands = (int)$brandStmt->fetch()['c'];
       </details>
     </div>
 
+    <div class="mb-4 rounded-xl border border-blue-700/40 bg-blue-950/30 p-4"><p class="text-sm text-blue-300">Active Package</p><p class="text-xl font-bold"><?= htmlspecialchars(strtoupper($activePlanCode)) ?></p></div>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <article class="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
         <p class="text-sm text-slate-400">Total Project</p>

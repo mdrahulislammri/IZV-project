@@ -1,25 +1,41 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/developer_package.php';
 $user = requireRole($pdo, 'developer');
 $error = null;
 $message = null;
+
+$sub = getActiveSubscription($pdo, (int)$user['id']);
+$plan = $sub ? getPlanByCode($pdo, $sub['package_code']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $brandName = trim($_POST['brand_name'] ?? '');
     $subdomain = strtolower(trim($_POST['subdomain'] ?? ''));
     $tagline = trim($_POST['tagline'] ?? '');
 
-    if (!$brandName || !$subdomain) {
+    if (!$plan) {
+        $error = 'Please buy a developer package first.';
+    } elseif (!$brandName || !$subdomain) {
         $error = 'Brand name and subdomain are required.';
     } elseif (!preg_match('/^[a-z0-9-]{3,40}$/', $subdomain)) {
         $error = 'Subdomain must be 3-40 chars (a-z, 0-9, -).';
     } else {
+        if ((int)$plan['brand_limit'] >= 0) {
+            $countStmt = $pdo->prepare('SELECT COUNT(*) FROM brands WHERE developer_id=?');
+            $countStmt->execute([$user['id']]);
+            if ((int)$countStmt->fetchColumn() >= (int)$plan['brand_limit']) {
+                $error = 'Brand limit reached for your package. Upgrade package.';
+            }
+        }
+
+        if (!$error) {
         $stmt = $pdo->prepare('INSERT INTO brands (developer_id, brand_name, subdomain, tagline) VALUES (?, ?, ?, ?)');
         try {
             $stmt->execute([$user['id'], $brandName, $subdomain, $tagline ?: null]);
             $message = 'Brand created successfully.';
         } catch (Throwable $e) {
             $error = 'Subdomain already used. Try another one.';
+        }
         }
     }
 }
@@ -31,6 +47,7 @@ $brands = $brandsStmt->fetchAll();
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Brands</title><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="bg-slate-950 text-slate-100"><div class="max-w-7xl mx-auto p-4 sm:p-6">
 <div class="mb-4 flex justify-between items-center"><h1 class="text-3xl font-black">My Brands</h1><a class="text-blue-300" href="/dev/dashboard">Back</a></div>
+<p class="mb-3 text-sm text-blue-300">Current Package: <?= htmlspecialchars(strtoupper($sub['package_code'] ?? 'NONE')) ?></p>
 <?php if($error):?><p class="mb-3 rounded bg-red-950/70 border border-red-700 p-3 text-red-200"><?=htmlspecialchars($error)?></p><?php endif;?>
 <?php if($message):?><p class="mb-3 rounded bg-emerald-950/70 border border-emerald-700 p-3 text-emerald-200"><?=htmlspecialchars($message)?></p><?php endif;?>
 <form method="post" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 grid md:grid-cols-3 gap-3 mb-5">

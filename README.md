@@ -88,3 +88,18 @@ VALUES ('admin','admin@example.com','$2y$10$replace_with_bcrypt_hash','8801xxxxx
 2. Developer uploads project under that brand (`/dev/my-projects`).
 3. Brand storefront shows projects at `/store/{subdomain}`.
 4. Buyer purchases from storefront and system auto-creates order with delivered build details.
+
+
+## Developer Package System
+
+Developers must activate a package from `/dev/package` before using full platform features.
+
+- **Starter (৳999/mo):** 1 brand, 5 scripts, 20 installs/month, subdomain only
+- **Pro (৳2999/mo):** 3 brands, 20 scripts, 200 installs/month, subdomain only
+- **Enterprise (৳7999/mo):** unlimited brands/scripts/installs, custom domain allowed
+
+Enforcements added:
+- Brand creation limit by package
+- Script upload limit by package
+- Purchase/install monthly limit by developer package
+- Custom domain purchase allowed only for Enterprise

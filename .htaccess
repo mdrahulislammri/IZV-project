@@ -25,6 +25,7 @@ DirectoryIndex index.php index.html
 
   RewriteRule ^dev/dashboard/?$ dev/dashboard.php [L,QSA]
   RewriteRule ^dev/my-projects/?$ dev/my-projects.php [L,QSA]
+  RewriteRule ^dev/package/?$ dev/package.php [L,QSA]
   RewriteRule ^dev/brands/?$ dev/brands.php [L,QSA]
   RewriteRule ^dev/my-clients/?$ dev/my-clients.php [L,QSA]
   RewriteRule ^dev/my-warns/?$ dev/my-warns.php [L,QSA]

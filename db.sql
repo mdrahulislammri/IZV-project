@@ -4,6 +4,8 @@ SET time_zone = '+00:00';
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS developer_clients;
+DROP TABLE IF EXISTS developer_subscriptions;
+DROP TABLE IF EXISTS developer_packages;
 DROP TABLE IF EXISTS warns;
 DROP TABLE IF EXISTS tickets;
 DROP TABLE IF EXISTS invoices;
@@ -28,6 +30,32 @@ CREATE TABLE categories (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(120) NOT NULL UNIQUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE developer_packages (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(30) NOT NULL UNIQUE,
+  name VARCHAR(80) NOT NULL,
+  price_monthly DECIMAL(10,2) NOT NULL,
+  brand_limit INT NOT NULL,
+  script_limit INT NOT NULL,
+  install_limit INT NOT NULL,
+  allow_custom_domain TINYINT(1) NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE developer_subscriptions (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  developer_id INT UNSIGNED NOT NULL,
+  package_id INT UNSIGNED NOT NULL,
+  package_code VARCHAR(30) NOT NULL,
+  started_at DATE NOT NULL,
+  expires_at DATE NOT NULL,
+  status ENUM('active','expired') NOT NULL DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_sub_developer FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_sub_package FOREIGN KEY (package_id) REFERENCES developer_packages(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE brands (
@@ -133,5 +161,18 @@ INSERT INTO categories (id, name) VALUES (1,'Ecommerce') ON DUPLICATE KEY UPDATE
 INSERT INTO categories (id, name) VALUES (2,'Portfolio') ON DUPLICATE KEY UPDATE name=VALUES(name);
 INSERT INTO categories (id, name) VALUES (3,'SaaS') ON DUPLICATE KEY UPDATE name=VALUES(name);
 INSERT INTO categories (id, name) VALUES (4,'Agency') ON DUPLICATE KEY UPDATE name=VALUES(name);
+
+
+INSERT INTO developer_packages (code, name, price_monthly, brand_limit, script_limit, install_limit, allow_custom_domain)
+VALUES ('starter','Starter',999,1,5,20,0)
+ON DUPLICATE KEY UPDATE name=VALUES(name), price_monthly=VALUES(price_monthly), brand_limit=VALUES(brand_limit), script_limit=VALUES(script_limit), install_limit=VALUES(install_limit), allow_custom_domain=VALUES(allow_custom_domain);
+
+INSERT INTO developer_packages (code, name, price_monthly, brand_limit, script_limit, install_limit, allow_custom_domain)
+VALUES ('pro','Pro',2999,3,20,200,0)
+ON DUPLICATE KEY UPDATE name=VALUES(name), price_monthly=VALUES(price_monthly), brand_limit=VALUES(brand_limit), script_limit=VALUES(script_limit), install_limit=VALUES(install_limit), allow_custom_domain=VALUES(allow_custom_domain);
+
+INSERT INTO developer_packages (code, name, price_monthly, brand_limit, script_limit, install_limit, allow_custom_domain)
+VALUES ('enterprise','Enterprise',7999,-1,-1,-1,1)
+ON DUPLICATE KEY UPDATE name=VALUES(name), price_monthly=VALUES(price_monthly), brand_limit=VALUES(brand_limit), script_limit=VALUES(script_limit), install_limit=VALUES(install_limit), allow_custom_domain=VALUES(allow_custom_domain);
 
 SET FOREIGN_KEY_CHECKS = 1;

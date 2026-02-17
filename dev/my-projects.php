@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/developer_package.php';
 $user = requireRole($pdo, 'developer');
 $error = null;
+$sub = getActiveSubscription($pdo, (int)$user['id']);
+$plan = $sub ? getPlanByCode($pdo, $sub['package_code']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -11,9 +14,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $preview = trim($_POST['preview_link'] ?? '');
     $price = (float)($_POST['base_price'] ?? 0);
 
-    if (!$name || !$brandId || !$category || !$description || !$preview || $price <= 0) {
+    if (!$plan) {
+        $error = 'Please buy a developer package first.';
+    } elseif (!$name || !$brandId || !$category || !$description || !$preview || $price <= 0) {
         $error = 'All fields required, including brand.';
     } else {
+        if ((int)$plan['script_limit'] >= 0) {
+            $cStmt = $pdo->prepare('SELECT COUNT(*) FROM projects WHERE developer_id=?');
+            $cStmt->execute([$user['id']]);
+            if ((int)$cStmt->fetchColumn() >= (int)$plan['script_limit']) {
+                $error = 'Script upload limit reached for your package. Upgrade package.';
+            }
+        }
+
+        if (!$error) {
         $script = isset($_FILES['script_file']) && $_FILES['script_file']['error'] === UPLOAD_ERR_OK ? uniqid('script_') . '_' . basename($_FILES['script_file']['name']) : null;
         $sqlFile = isset($_FILES['sql_file']) && $_FILES['sql_file']['error'] === UPLOAD_ERR_OK ? uniqid('sql_') . '_' . basename($_FILES['sql_file']['name']) : null;
         if ($script) { move_uploaded_file($_FILES['script_file']['tmp_name'], __DIR__ . '/../uploads/' . $script); }
@@ -21,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $ins = $pdo->prepare('INSERT INTO projects (developer_id, brand_id, category_id, name, description, preview_link, base_price, script_file, sql_file, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "active")');
         $ins->execute([$user['id'], $brandId, $category, $name, $description, $preview, $price, $script, $sqlFile]);
+        }
     }
 }
 
@@ -35,6 +50,7 @@ $projects = $stmt->fetchAll();
 ?>
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dev Projects</title><script src="https://cdn.tailwindcss.com"></script></head><body class="bg-slate-950 text-slate-100"><div class="max-w-7xl mx-auto p-4 sm:p-6">
 <div class="flex flex-wrap justify-between items-center mb-4 gap-2"><h1 class="text-3xl font-bold">My Projects</h1><a href="/dev/brands" class="rounded border border-blue-500 px-3 py-2 text-blue-300">+ Create Brand</a></div>
+<p class="mb-3 text-sm text-blue-300">Current Package: <?= htmlspecialchars(strtoupper($sub['package_code'] ?? 'NONE')) ?></p>
 <?php if($error):?><p class="mb-3 rounded bg-red-950/70 border border-red-700 p-3 text-red-200"><?=htmlspecialchars($error)?></p><?php endif;?>
 <?php if(!$brands):?><p class="mb-3 rounded bg-amber-950/70 border border-amber-700 p-3 text-amber-200">Create at least one brand before uploading a project.</p><?php endif;?>
 <form method="post" enctype="multipart/form-data" class="bg-slate-900 border border-slate-800 rounded-xl p-4 grid md:grid-cols-2 gap-3 mb-4">
