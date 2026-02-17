@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/developer_package.php';
+require_once __DIR__ . '/../includes/developer_wallet.php';
+require_once __DIR__ . '/../includes/deployment.php';
 
 $user = requireRole($pdo, 'buyer');
 $projectId = (int)($_GET['project_id'] ?? $_POST['project_id'] ?? 0);
@@ -44,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$error) {
         $subtotal = (float)$project['base_price'] * $duration;
+        $installCharge = 10.00;
         $expires = (new DateTime())->modify('+' . $duration . ' months')->format('Y-m-d');
         $adminUser = 'admin_' . strtolower(preg_replace('/\W+/', '', $websiteName));
         $adminPass = bin2hex(random_bytes(4));
@@ -52,6 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deliveryNote = 'Auto build complete from brand storefront: ' . $sourceSubdomain . '.platform.com';
 
         $pdo->beginTransaction();
+
+        if (!walletChargeInstall($pdo, (int)$project['developer_id'], $installCharge, 'Auto install charge for order')) {
+            $pdo->rollBack();
+            $error = 'Developer wallet balance is too low for auto-install processing. Please try later.';
+        }
+
+        if (!$error) {
         $order = $pdo->prepare('INSERT INTO orders (user_id, project_id, website_name, domain_type, domain_name, duration_months, subtotal, late_fee, total_price, status, build_status, delivery_note, source_subdomain, expires_at, deployed_url, admin_url, admin_username, admin_password) VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?, "active", "delivered", ?, ?, ?, ?, ?, ?, ?)');
         $order->execute([$user['id'], $projectId, $websiteName, $domainType, $domain, $duration, $subtotal, $subtotal, $deliveryNote, $sourceSubdomain, $expires, $deployedUrl, $adminUrl, $adminUser, $adminPass]);
         $orderId = (int)$pdo->lastInsertId();
@@ -61,10 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $dc = $pdo->prepare('INSERT INTO developer_clients (developer_id, user_id, project_id, order_id) VALUES (?, ?, ?, ?)');
         $dc->execute([$project['developer_id'], $user['id'], $projectId, $orderId]);
+        queueBuildJob($pdo, $orderId);
+        processBuildJobImmediately($pdo, $orderId);
         $pdo->commit();
 
         header('Location: /shop/success.php?order_id=' . $orderId);
         exit;
+        }
     }
 }
 ?>
@@ -78,6 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <select name="domain_type" class="border border-slate-700 bg-slate-950 rounded p-2"><option value="subdomain">Sub Domain</option><option value="custom">Custom Domain</option></select>
 <input name="domain_name" placeholder="myshop or myshop.com" class="border border-slate-700 bg-slate-950 rounded p-2" required>
 <select name="duration" class="border border-slate-700 bg-slate-950 rounded p-2"><option value="1">1 Month</option><option value="6">6 Months</option><option value="12">1 Year</option></select>
-<p class="text-sm text-slate-400">Price = Base price × selected months. Package limits are enforced.</p>
+<p class="text-sm text-slate-400">Price = Base price × selected months. Package limits are enforced. Auto install charge ৳10 from developer wallet.</p>
 <button class="bg-emerald-600 text-white rounded p-2">Complete Payment</button>
 </form></div></body></html>

@@ -4,6 +4,9 @@ SET time_zone = '+00:00';
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS developer_clients;
+DROP TABLE IF EXISTS build_jobs;
+DROP TABLE IF EXISTS developer_wallet_transactions;
+DROP TABLE IF EXISTS developer_wallets;
 DROP TABLE IF EXISTS developer_subscriptions;
 DROP TABLE IF EXISTS developer_packages;
 DROP TABLE IF EXISTS warns;
@@ -58,6 +61,25 @@ CREATE TABLE developer_subscriptions (
   CONSTRAINT fk_sub_package FOREIGN KEY (package_id) REFERENCES developer_packages(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+CREATE TABLE developer_wallets (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  developer_id INT UNSIGNED NOT NULL UNIQUE,
+  balance DECIMAL(12,2) NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_wallet_developer FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE developer_wallet_transactions (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  developer_id INT UNSIGNED NOT NULL,
+  type ENUM('deposit','charge') NOT NULL,
+  amount DECIMAL(12,2) NOT NULL,
+  note VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_wallet_tx_developer FOREIGN KEY (developer_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE brands (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   developer_id INT UNSIGNED NOT NULL,
@@ -110,6 +132,18 @@ CREATE TABLE orders (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_orders_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE build_jobs (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  order_id INT UNSIGNED NOT NULL UNIQUE,
+  status ENUM('queued','building','done','failed') NOT NULL DEFAULT 'queued',
+  progress INT NOT NULL DEFAULT 0,
+  message VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_build_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE invoices (
