@@ -47,10 +47,10 @@ $walletBalance = (float)$wallet['balance'];
         <div class="absolute right-0 z-10 mt-2 w-52 space-y-1 rounded-xl border border-slate-700 bg-slate-900 p-2 shadow-xl">
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/dashboard">Dashboard</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/shop">Shop</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/my-projects">My Projects</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/projects">Projects</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/invoice">Invoice</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/wallet">Wallet</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/wallet/transection">Wallet Transactions</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/wallets">Wallet</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/user/wallets/transection">Wallet Transactions</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/ticket">Ticket</a>
           <a class="block rounded px-2 py-1 text-red-300 hover:bg-red-950" href="/logout">Logout</a>
         </div>

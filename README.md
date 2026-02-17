@@ -40,12 +40,12 @@ Admin login is separate and protected by IP whitelist (`admin_ip_whitelist` tabl
 - `/shop`
 - `/store/{subdomain}`
 - `/dev/brands`
-- `/dev/wallet`
-- `/dev/wallet/transection`
-- `/user/my-projects`
+- `/dev/wallets`
+- `/dev/wallets/transection`
+- `/user/projects`
 - `/user/invoice`
-- `/user/wallet`
-- `/user/wallet/transection`
+- `/user/wallets`
+- `/user/wallets/transection`
 - `/ticket`
 
 ## Setup
@@ -97,7 +97,7 @@ VALUES ('admin','admin@example.com','$2y$10$replace_with_bcrypt_hash','8801xxxxx
 ## Auto build + delivery flow
 
 1. Developer creates brand and subdomain (`/dev/brands`).
-2. Developer uploads project under that brand (`/dev/my-projects`).
+2. Developer uploads project under that brand (`/dev/projects`).
 3. Brand storefront shows projects at `/store/{subdomain}`.
 4. Buyer purchases from storefront and system auto-creates order with delivered build details.
 

@@ -56,14 +56,14 @@ $walletBalance = (float)$wallet['balance'];
         <summary class="cursor-pointer rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 font-medium">⋮ Menu</summary>
         <div class="absolute right-0 z-10 mt-2 w-52 space-y-1 rounded-xl border border-slate-700 bg-slate-900 p-2 shadow-xl">
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/dashboard">Dashboard</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/my-projects">My Projects</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/projects">Projects</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/package">My Package</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/brands">My Brands</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/my-clients">My Clients</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/my-warns">My Warns</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/my-account">My Account</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/wallet">Wallet</a>
-          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/wallet/transection">Wallet Transactions</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/clients">Clients</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/warns">Warns</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/account">Account</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/wallets">Wallet</a>
+          <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/dev/wallets/transection">Wallet Transactions</a>
           <a class="block rounded px-2 py-1 hover:bg-slate-800" href="/ticket">Ticket</a>
           <a class="block rounded px-2 py-1 text-red-300 hover:bg-red-950" href="/logout">Logout</a>
         </div>
