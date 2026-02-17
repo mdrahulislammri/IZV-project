@@ -27,6 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['renew'])) {
 
         $upOrd = $pdo->prepare('UPDATE orders SET expires_at=?, status="active", late_fee=?, total_price=? WHERE id=?');
         $upOrd->execute([$newDue, $lateFee, $total, $inv['order_id']]);
+        pushToast('success', 'Invoice renewed successfully.');
+    } else {
+        pushToast('error', 'Invoice not found.');
     }
 
     header('Location: /user/invoice');
@@ -84,5 +87,5 @@ $invoices = $stmt->fetchAll();
       </table>
     </div>
   </div>
-</body>
+<?= renderToastContainer() ?></body>
 </html>

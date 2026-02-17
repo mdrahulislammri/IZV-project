@@ -52,8 +52,9 @@ function requireLogin(PDO $pdo): array
 
     $user = currentUser($pdo);
     if (!$user || $user['status'] === 'banned') {
+        pushToast('error', 'Account is banned due to warn policy.');
         session_destroy();
-        header('Location: /login?error=banned');
+        header('Location: /login');
         exit;
     }
 
@@ -74,4 +75,60 @@ function redirectByRole(array $user): void
 {
     header('Location: ' . dashboardPathByRole($user['role']));
     exit;
+}
+
+function pushToast(string $type, string $message): void
+{
+    $allowed = ['success', 'error', 'info', 'warning'];
+    if (!in_array($type, $allowed, true)) {
+        $type = 'info';
+    }
+
+    if (!isset($_SESSION['toasts']) || !is_array($_SESSION['toasts'])) {
+        $_SESSION['toasts'] = [];
+    }
+
+    $_SESSION['toasts'][] = [
+        'type' => $type,
+        'message' => trim($message),
+    ];
+}
+
+function consumeToasts(): array
+{
+    $toasts = $_SESSION['toasts'] ?? [];
+    unset($_SESSION['toasts']);
+    return is_array($toasts) ? $toasts : [];
+}
+
+function renderToastContainer(): string
+{
+    $toasts = array_values(array_filter(consumeToasts(), function ($toast) {
+        return is_array($toast) && !empty($toast['message']);
+    }));
+
+    if (!$toasts) {
+        return '';
+    }
+
+    $json = json_encode($toasts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($json === false) {
+        return '';
+    }
+
+    return '<div id="toast-root" class="fixed right-4 top-4 z-[9999] flex w-[92vw] max-w-sm flex-col gap-2"></div>'
+        . '<script>(function(){'
+        . 'const data=' . $json . ';'
+        . 'const root=document.getElementById("toast-root");'
+        . 'if(!root||!Array.isArray(data)){return;}'
+        . 'const tone={success:"border-emerald-500 bg-emerald-950/95 text-emerald-100",error:"border-red-500 bg-red-950/95 text-red-100",warning:"border-amber-500 bg-amber-950/95 text-amber-100",info:"border-blue-500 bg-slate-900/95 text-slate-100"};'
+        . 'data.forEach((t,idx)=>{'
+        . 'const item=document.createElement("div");'
+        . 'item.className="pointer-events-auto translate-x-6 opacity-0 transition-all duration-300 rounded-lg border px-3 py-2 text-sm shadow-xl backdrop-blur "+(tone[t.type]||tone.info);'
+        . 'item.textContent=t.message;'
+        . 'root.appendChild(item);'
+        . 'setTimeout(()=>{item.classList.remove("translate-x-6","opacity-0");},50+idx*120);'
+        . 'setTimeout(()=>{item.classList.add("translate-x-6","opacity-0");setTimeout(()=>item.remove(),250);},3600+idx*220);'
+        . '});'
+        . '})();</script>';
 }

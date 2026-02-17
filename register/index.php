@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $insert = $pdo->prepare('INSERT INTO users (username, email, password, support_number, role, status) VALUES (?, ?, ?, ?, ?, ?)');
             $insert->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT), $support, $role, 'active']);
-            header('Location: /login?registered=1');
+            pushToast('success', 'Registration complete. Please login.');
+            header('Location: /login');
             exit;
         }
     }
@@ -65,5 +66,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </section>
     </div>
   </div>
-</body>
+<?= renderToastContainer() ?></body>
 </html>

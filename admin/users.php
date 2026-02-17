@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $targetStatus = ($_POST['toggle'] === 'ban') ? 'banned' : 'active';
         $stmt = $pdo->prepare("UPDATE users SET status=? WHERE id=? AND role IN ('buyer','developer')");
         $stmt->execute([$targetStatus, $id]);
+        pushToast('success', $targetStatus === 'banned' ? 'User banned successfully.' : 'User unbanned successfully.');
         header('Location: /admin/users');
         exit;
     }
@@ -24,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($username && $email && $support) {
             $stmt = $pdo->prepare('UPDATE users SET username=?, email=?, support_number=?, status=? WHERE id=?');
             $stmt->execute([$username, $email, $support, $status, $editId]);
+            pushToast('success', 'User profile updated successfully.');
+        } else {
+            pushToast('error', 'All user fields are required.');
         }
         header('Location: /admin/users');
         exit;
@@ -106,5 +110,5 @@ $rows = $pdo->query("SELECT id, username, email, support_number, role, status, c
       </table>
     </div>
   </div>
-</body>
+<?= renderToastContainer() ?></body>
 </html>

@@ -38,4 +38,4 @@ $projects = $projectsStmt->fetchAll();
 </article>
 <?php endforeach; ?>
 </section>
-</div></body></html>
+</div><?= renderToastContainer() ?></body></html>

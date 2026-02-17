@@ -66,4 +66,4 @@ $brands = $brandsStmt->fetchAll();
 </article>
 <?php endforeach; ?>
 </div>
-</div></body></html>
+</div><?= renderToastContainer() ?></body></html>

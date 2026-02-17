@@ -89,5 +89,5 @@ $user = currentUser($pdo);
       </div>
     </section>
   </main>
-</body>
+<?= renderToastContainer() ?></body>
 </html>

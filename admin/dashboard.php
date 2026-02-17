@@ -17,4 +17,4 @@ $stats = [
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 <?php foreach($stats as $k=>$v): ?><article class="rounded-xl border bg-white p-5 shadow-sm"><p class="text-sm text-slate-500 capitalize"><?= htmlspecialchars($k) ?></p><p class="text-3xl font-black"><?= $v ?></p></article><?php endforeach; ?>
 </div>
-</div></body></html>
+</div><?= renderToastContainer() ?></body></html>

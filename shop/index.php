@@ -83,5 +83,5 @@ $projects = $stmt->fetchAll();
       </div>
     <?php endif; ?>
   </div>
-</body>
+<?= renderToastContainer() ?></body>
 </html>

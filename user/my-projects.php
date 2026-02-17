@@ -23,4 +23,4 @@ $rows = $stmt->fetchAll();
 </div></details>
 </div>
 <?php endforeach;?>
-</div></div><script>function toggle(btn,id){const el=document.getElementById(id);el.classList.toggle('hidden');btn.textContent=el.classList.contains('hidden')?'unhide':'hide';}</script></body></html>
+</div></div><script>function toggle(btn,id){const el=document.getElementById(id);el.classList.toggle('hidden');btn.textContent=el.classList.contains('hidden')?'unhide':'hide';}</script><?= renderToastContainer() ?></body></html>

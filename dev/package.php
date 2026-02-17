@@ -55,4 +55,4 @@ $activePlan = $activeSub ? getPlanByCode($pdo, $activeSub['package_code']) : nul
 </article>
 <?php endforeach; ?>
 </div>
-</div></body></html>
+</div><?= renderToastContainer() ?></body></html>

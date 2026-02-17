@@ -73,8 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dc->execute([$project['developer_id'], $user['id'], $projectId, $orderId]);
         queueBuildJob($pdo, $orderId);
         processBuildJobImmediately($pdo, $orderId);
-        $pdo->commit();
+$pdo->commit();
 
+        pushToast('success', 'Payment complete. Auto deployment started successfully.');
         header('Location: /shop/success.php?order_id=' . $orderId);
         exit;
         }
@@ -93,4 +94,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <select name="duration" class="border border-slate-700 bg-slate-950 rounded p-2"><option value="1">1 Month</option><option value="6">6 Months</option><option value="12">1 Year</option></select>
 <p class="text-sm text-slate-400">Price = Base price × selected months. Package limits are enforced. Auto install charge ৳10 from developer wallet.</p>
 <button class="bg-emerald-600 text-white rounded p-2">Complete Payment</button>
-</form></div></body></html>
+</form></div><?= renderToastContainer() ?></body></html>

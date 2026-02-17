@@ -101,5 +101,5 @@ $walletBalance = (float)$wallet['balance'];
       </article>
     </div>
   </div>
-</body>
+<?= renderToastContainer() ?></body>
 </html>

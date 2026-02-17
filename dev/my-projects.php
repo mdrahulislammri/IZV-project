@@ -65,4 +65,4 @@ $projects = $stmt->fetchAll();
 <button class="bg-blue-600 text-white rounded p-2 md:col-span-2" <?= !$brands ? 'disabled' : '' ?>>Upload Project</button>
 </form>
 <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto"><table class="w-full min-w-[760px] text-sm"><thead><tr class="bg-slate-950"><th class="p-3 text-left">Project</th><th>Brand</th><th>Subdomain</th><th>Category</th><th>Price</th><th>Status</th></tr></thead><tbody><?php foreach($projects as $p):?><tr class="border-t border-slate-800"><td class="p-3"><?=htmlspecialchars($p['name'])?></td><td><?=htmlspecialchars($p['brand_name'])?></td><td><?=htmlspecialchars($p['subdomain'])?></td><td><?=htmlspecialchars($p['category_name'])?></td><td>৳<?=number_format((float)$p['base_price'],2)?></td><td><?=htmlspecialchars($p['status'])?></td></tr><?php endforeach;?></tbody></table></div>
-</div></body></html>
+</div><?= renderToastContainer() ?></body></html>

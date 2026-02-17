@@ -44,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <section class="p-8">
         <h2 class="mb-1 text-2xl font-bold">Login</h2>
         <p class="mb-5 text-sm text-slate-500">Use email or username + password.</p>
-        <?php if (isset($_GET['registered'])): ?><p class="mb-3 rounded bg-green-100 p-2 text-sm text-green-700">Registration complete. Please login.</p><?php endif; ?>
         <?php if ($error): ?><p class="mb-3 rounded bg-red-100 p-2 text-sm text-red-700"><?= htmlspecialchars($error) ?></p><?php endif; ?>
         <form method="post" class="space-y-3">
           <input name="identity" placeholder="Email or Username" class="w-full rounded-lg border p-3" required>
@@ -55,5 +54,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </section>
     </div>
   </div>
-</body>
+<?= renderToastContainer() ?></body>
 </html>

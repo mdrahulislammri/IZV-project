@@ -24,4 +24,4 @@ const root=document.getElementById('steps');
 labels.forEach(l=>{const d=document.createElement('div');d.className='bg-slate-800 p-3 rounded';d.innerHTML=`<p>${l}</p><div class="w-full bg-slate-700 h-2 rounded"><div class="h-2 bg-green-500 rounded bar" style="width:0%"></div></div>`;root.appendChild(d)});
 let p=0;const bars=document.querySelectorAll('.bar');const t=setInterval(()=>{p+=5;bars.forEach(b=>b.style.width=p+'%');if(p>=100)clearInterval(t);},120);
 </script>
-</body></html>
+<?= renderToastContainer() ?></body></html>

@@ -53,5 +53,5 @@ $deactiveProjects = max(0, $totalProjects - $activeProjects);
       </article>
     </div>
   </div>
-</body>
+<?= renderToastContainer() ?></body>
 </html>
