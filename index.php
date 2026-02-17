@@ -29,8 +29,9 @@ $user = currentUser($pdo);
           <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500" href="<?= dashboardPathByRole($user['role']) ?>">Dashboard</a>
           <a class="rounded-lg border border-red-700 px-4 py-2 text-red-300 hover:bg-red-950" href="/logout">Logout</a>
         <?php else: ?>
-          <a class="text-blue-300 hover:text-blue-200" href="/login">Login</a>
-          <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500" href="/register">Register</a>
+          <a class="text-blue-300 hover:text-blue-200" href="/login">Buyer Login</a>
+          <a class="rounded-lg border border-cyan-700 px-4 py-2 font-medium text-cyan-300 hover:bg-cyan-950" href="/dev/login">Developer Login</a>
+          <a class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500" href="/register">Buyer Register</a>
         <?php endif; ?>
       </nav>
     </div>
@@ -43,7 +44,8 @@ $user = currentUser($pdo);
         <h1 class="mb-4 text-4xl font-black leading-tight sm:text-5xl">Build, Sell & Launch Websites Faster</h1>
         <p class="mb-6 text-base text-slate-300 sm:text-lg">One powerful platform for buyers, developers and admin operations. Enjoy clean dashboards, billing automation, support tickets and modern storefront experience.</p>
         <div class="flex flex-wrap gap-3">
-          <a href="/register" class="rounded-xl bg-white px-5 py-3 font-semibold text-slate-900 hover:bg-slate-200">Start Free</a>
+          <a href="/register" class="rounded-xl bg-white px-5 py-3 font-semibold text-slate-900 hover:bg-slate-200">Buyer Start</a>
+          <a href="/dev/register" class="rounded-xl border border-cyan-700 bg-slate-900 px-5 py-3 font-semibold text-cyan-200 hover:bg-slate-800">Join as Developer</a>
           <a href="/shop" class="rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 font-semibold text-slate-100 hover:bg-slate-800">Explore Shop</a>
         </div>
       </div>

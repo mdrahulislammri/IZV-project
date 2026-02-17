@@ -12,6 +12,8 @@ DirectoryIndex index.php index.html
   # Route-style URLs to folder index.php
   RewriteRule ^login/?$ login/index.php [L,QSA]
   RewriteRule ^register/?$ register/index.php [L,QSA]
+  RewriteRule ^dev/login/?$ dev/login/index.php [L,QSA]
+  RewriteRule ^dev/register/?$ dev/register/index.php [L,QSA]
   RewriteRule ^logout/?$ logout/index.php [L,QSA]
   RewriteRule ^ticket/?$ ticket/index.php [L,QSA]
 

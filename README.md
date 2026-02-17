@@ -4,8 +4,8 @@ Updated system includes:
 
 - Single landing page (`/`) with premium design sections (features/about/contact)
 - Authentication with role-based redirects
-- Login with **Email or Username + Password**
-- Register fields: Username, Email, Password, Support Number, Role
+- Login with **Email or Username + Password** (separate Buyer/Admin and Developer auth pages)
+- Buyer Register fields: Username, Email, Password, Support Number (developer registration is on dedicated `/dev/register`)
 - Buyer panel: dashboard, shop filters, buy flow, my projects, invoices, tickets
 - Developer panel: dashboard, brands, my projects upload, clients, warns, account, tickets
 - Brand storefront system: developer creates brand+subdomain, projects appear in brand store
@@ -26,7 +26,9 @@ Updated system includes:
 ## URL Structure
 
 - `/login`
-- `/register`
+- `/register` (Buyer)
+- `/dev/login` (Developer)
+- `/dev/register` (Developer)
 - `/user/dashboard`
 - `/dev/dashboard`
 - `/admin/dashboard`
