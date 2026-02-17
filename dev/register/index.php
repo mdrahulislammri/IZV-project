@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Developer Register | ScriptDeploy</title>
+  <title>Register | ScriptDeploy</title>
   <meta name="description" content="Create your developer account on ScriptDeploy.">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -44,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="grid w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-2xl md:grid-cols-2">
       <section class="hidden bg-slate-950 p-8 md:block">
         <p class="mb-3 inline-flex rounded-full border border-indigo-600/40 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300">Developer Onboarding</p>
-        <h1 class="text-3xl font-black">Create Developer Account</h1>
+        <h1 class="text-3xl font-black">Create Account</h1>
         <p class="mt-3 text-slate-300">Launch your own brand storefront and sell scripts professionally.</p>
       </section>
       <section class="p-8">
-        <h2 class="mb-1 text-2xl font-bold">Register as Developer</h2>
+        <h2 class="mb-1 text-2xl font-bold">Register</h2>
         <p class="mb-5 text-sm text-slate-400">All fields are required.</p>
         <?php if ($error): ?><p class="mb-3 rounded bg-red-100 p-2 text-sm text-red-700"><?= htmlspecialchars($error) ?></p><?php endif; ?>
         <form method="post" class="space-y-3">
@@ -56,10 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <input name="email" type="email" placeholder="Email" class="w-full rounded-lg border border-slate-700 bg-slate-950 p-3" required>
           <input name="password" type="password" placeholder="Password" class="w-full rounded-lg border border-slate-700 bg-slate-950 p-3" required>
           <input name="support_number" placeholder="Support Number" class="w-full rounded-lg border border-slate-700 bg-slate-950 p-3" required>
-          <button class="w-full rounded-lg bg-indigo-600 p-3 font-semibold text-white hover:bg-indigo-500">Create Developer Account</button>
+          <button class="w-full rounded-lg bg-indigo-600 p-3 font-semibold text-white hover:bg-indigo-500">Create Account</button>
         </form>
-        <p class="mt-4 text-sm text-slate-400">Already registered? <a class="font-medium text-indigo-300" href="/dev/login">Developer login</a></p>
-        <p class="mt-2 text-sm text-slate-500">Buyer account? <a class="text-blue-400" href="/register">Go to buyer register</a></p>
+        <p class="mt-4 text-sm text-slate-400">Already registered? <a class="font-medium text-indigo-300" href="/dev/login">Login</a></p>
+        <p class="mt-2 text-sm text-slate-500">Need another portal? <a class="text-blue-400" href="/register">Register</a></p>
       </section>
     </div>
   </div>

@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="mt-3 text-slate-300">Create your buyer account. Developers have a dedicated registration portal.</p>
       </section>
       <section class="p-8">
-        <h2 class="mb-1 text-2xl font-bold">Buyer Register</h2>
+        <h2 class="mb-1 text-2xl font-bold">Register</h2>
         <p class="mb-5 text-sm text-slate-500">All fields are required.</p>
         <?php if ($error): ?><p class="mb-3 rounded bg-red-100 p-2 text-sm text-red-700"><?= htmlspecialchars($error) ?></p><?php endif; ?>
         <form method="post" class="space-y-3">
@@ -57,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <input name="support_number" placeholder="Support Number" class="w-full rounded-lg border p-3" required>
           <button class="w-full rounded-lg bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700">Create Account</button>
         </form>
-        <p class="mt-4 text-sm text-slate-600">Already have buyer account? <a class="font-medium text-blue-600" href="/login">Buyer Login</a></p>
-        <p class="mt-2 text-sm text-slate-600">Developer? <a class="font-medium text-indigo-600" href="/dev/register">Developer Register</a></p>
+        <p class="mt-4 text-sm text-slate-600">Already have account? <a class="font-medium text-blue-600" href="/login">Login</a></p>
+        <p class="mt-2 text-sm text-slate-600">Need another portal? <a class="font-medium text-indigo-600" href="/dev/register">Register</a></p>
       </section>
     </div>
   </div>

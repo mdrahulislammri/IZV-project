@@ -42,11 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="mx-auto flex min-h-screen max-w-5xl items-center justify-center">
     <div class="grid w-full overflow-hidden rounded-2xl border bg-white shadow-xl md:grid-cols-2">
       <section class="hidden bg-slate-900 p-8 text-white md:block">
-        <h1 class="text-3xl font-black">Buyer Login</h1>
+        <h1 class="text-3xl font-black">Login</h1>
         <p class="mt-3 text-slate-300">Access your buyer workspace securely. Developers and admins use dedicated portals.</p>
       </section>
       <section class="p-8">
-        <h2 class="mb-1 text-2xl font-bold">Buyer Login</h2>
+        <h2 class="mb-1 text-2xl font-bold">Login</h2>
         <p class="mb-5 text-sm text-slate-500">Use email or username + password.</p>
         <?php if ($error): ?><p class="mb-3 rounded bg-red-100 p-2 text-sm text-red-700"><?= htmlspecialchars($error) ?></p><?php endif; ?>
         <form method="post" class="space-y-3">
@@ -54,9 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <input name="password" type="password" placeholder="Password" class="w-full rounded-lg border p-3" required>
           <button class="w-full rounded-lg bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700">Login</button>
         </form>
-        <p class="mt-4 text-sm text-slate-600">No buyer account? <a class="font-medium text-blue-600" href="/register">Buyer Register</a></p>
-        <p class="mt-2 text-sm text-slate-600">Developer? <a class="font-medium text-cyan-600" href="/dev/login">Developer Login</a></p>
-        <p class="mt-2 text-sm text-slate-600">Admin? <a class="font-medium text-red-600" href="/admin/login">Admin Login</a></p>
+        <p class="mt-4 text-sm text-slate-600">No account? <a class="font-medium text-blue-600" href="/register">Register</a></p>
+        <p class="mt-2 text-sm text-slate-600">Need another portal? <a class="font-medium text-cyan-600" href="/dev/login">Login</a></p>
+        <p class="mt-2 text-sm text-slate-600">Need secure portal? <a class="font-medium text-red-600" href="/admin/login">Login</a></p>
       </section>
     </div>
   </div>
