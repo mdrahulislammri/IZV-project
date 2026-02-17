@@ -4,6 +4,7 @@ SET time_zone = '+00:00';
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS developer_clients;
+DROP TABLE IF EXISTS site_settings;
 DROP TABLE IF EXISTS admin_ip_whitelist;
 DROP TABLE IF EXISTS build_jobs;
 DROP TABLE IF EXISTS developer_wallet_transactions;
@@ -28,6 +29,14 @@ CREATE TABLE users (
   role ENUM('buyer','developer','admin') NOT NULL DEFAULT 'buyer',
   status ENUM('active','banned') NOT NULL DEFAULT 'active',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE site_settings (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  setting_key VARCHAR(120) NOT NULL UNIQUE,
+  setting_value TEXT NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE categories (
@@ -200,6 +209,17 @@ CREATE TABLE developer_clients (
   CONSTRAINT fk_dc_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
   CONSTRAINT fk_dc_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('site_name', 'ScriptDeploy') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('site_meta_description', 'Premium script marketplace where developers sell deploy-ready scripts and buyers launch websites quickly.') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('hero_badge', 'Premium SaaS Marketplace') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('hero_title', 'Build, Sell & Launch Websites Faster') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('hero_description', 'One powerful platform for buyers, developers and admin operations. Enjoy clean dashboards, billing automation, support tickets and modern storefront experience.') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('contact_email', 'support@scriptdeploy.local') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('contact_hours', 'Sat–Thu, 10:00 AM - 8:00 PM') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('nav_login_text', 'Login') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+INSERT INTO site_settings (setting_key, setting_value) VALUES ('nav_register_text', 'Register') ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
 
 INSERT INTO categories (id, name) VALUES (1,'Ecommerce') ON DUPLICATE KEY UPDATE name=VALUES(name);
 INSERT INTO categories (id, name) VALUES (2,'Portfolio') ON DUPLICATE KEY UPDATE name=VALUES(name);

@@ -36,6 +36,7 @@ Admin login is separate and protected by IP whitelist (`admin_ip_whitelist` tabl
 - `/dev/dashboard`
 - `/admin/login`
 - `/admin/dashboard`
+- `/admin/settings`
 - `/shop`
 - `/store/{subdomain}`
 - `/dev/brands`
@@ -117,3 +118,5 @@ Enforcements added:
 - Admin access is restricted to whitelisted IPs from `admin_ip_whitelist`
 - Admin can create buyer/developer/admin users from `/admin/users`
 - Admin can manage whitelist IP entries from `/admin/users`
+
+- Admin can fully control landing website content from `/admin/settings`.
