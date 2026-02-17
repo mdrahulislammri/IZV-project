@@ -1,0 +1,62 @@
+Options -Indexes
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Keep real files/directories unchanged
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Route-style URLs to folder index.php
+  RewriteRule ^login/?$ login/index.php [L,QSA]
+  RewriteRule ^register/?$ register/index.php [L,QSA]
+  RewriteRule ^dev/login/?$ dev/login/index.php [L,QSA]
+  RewriteRule ^dev/register/?$ dev/register/index.php [L,QSA]
+  RewriteRule ^admin/login/?$ admin/login.php [L,QSA]
+  RewriteRule ^logout/?$ logout/index.php [L,QSA]
+  RewriteRule ^ticket/?$ ticket/index.php [L,QSA]
+
+  RewriteRule ^shop/?$ shop/index.php [L,QSA]
+  RewriteRule ^shop/buy/?$ shop/buy.php [L,QSA]
+  RewriteRule ^shop/success/?$ shop/success.php [L,QSA]
+
+  RewriteRule ^user/dashboard/?$ user/dashboard.php [L,QSA]
+  RewriteRule ^user/projects/?$ user/projects.php [L,QSA]
+  RewriteRule ^user/my-projects/?$ user/projects.php [L,QSA]
+  RewriteRule ^user/invoice/?$ user/invoice.php [L,QSA]
+  RewriteRule ^user/wallets/?$ user/wallets/Index.php [L,QSA]
+  RewriteRule ^user/wallets/transection/?$ user/wallets/transection.php [L,QSA]
+  RewriteRule ^user/wallets/transaction/?$ user/wallets/transection.php [L,QSA]
+  RewriteRule ^user/wallet/?$ user/wallets/Index.php [L,QSA]
+  RewriteRule ^user/wallet/transection/?$ user/wallets/transection.php [L,QSA]
+  RewriteRule ^user/wallet/transaction/?$ user/wallets/transection.php [L,QSA]
+
+  RewriteRule ^dev/dashboard/?$ dev/dashboard.php [L,QSA]
+  RewriteRule ^dev/projects/?$ dev/projects.php [L,QSA]
+  RewriteRule ^dev/my-projects/?$ dev/projects.php [L,QSA]
+  RewriteRule ^dev/package/?$ dev/package.php [L,QSA]
+  RewriteRule ^dev/brands/?$ dev/brands.php [L,QSA]
+  RewriteRule ^dev/clients/?$ dev/clients.php [L,QSA]
+  RewriteRule ^dev/my-clients/?$ dev/clients.php [L,QSA]
+  RewriteRule ^dev/warns/?$ dev/warns.php [L,QSA]
+  RewriteRule ^dev/my-warns/?$ dev/warns.php [L,QSA]
+  RewriteRule ^dev/account/?$ dev/account.php [L,QSA]
+  RewriteRule ^dev/my-account/?$ dev/account.php [L,QSA]
+  RewriteRule ^dev/wallets/?$ dev/wallets/Index.php [L,QSA]
+  RewriteRule ^dev/wallets/transection/?$ dev/wallets/transection.php [L,QSA]
+  RewriteRule ^dev/wallets/transaction/?$ dev/wallets/transection.php [L,QSA]
+  RewriteRule ^dev/wallet/?$ dev/wallets/Index.php [L,QSA]
+  RewriteRule ^dev/wallet/transection/?$ dev/wallets/transection.php [L,QSA]
+  RewriteRule ^dev/wallet/transaction/?$ dev/wallets/transection.php [L,QSA]
+
+  RewriteRule ^admin/dashboard/?$ admin/dashboard.php [L,QSA]
+  RewriteRule ^admin/users/?$ admin/users.php [L,QSA]
+  RewriteRule ^admin/settings/?$ admin/settings.php [L,QSA]
+  RewriteRule ^admin/categories/?$ admin/categories.php [L,QSA]
+  RewriteRule ^admin/warns/?$ admin/warns.php [L,QSA]
+  RewriteRule ^admin/tickets/?$ admin/tickets.php [L,QSA]
+
+  RewriteRule ^store/([a-zA-Z0-9-]+)/?$ store/index.php?subdomain=$1 [L,QSA]
+</IfModule>
